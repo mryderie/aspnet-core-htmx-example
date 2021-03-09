@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "outDir": "obj",
+    "target": "es5",
+    "moduleResolution": "node"
+  },
+  "compileOnSave": true,
+  "include": [
+    "ClientApp/Scripts/**/*.ts"
+  ]
+}

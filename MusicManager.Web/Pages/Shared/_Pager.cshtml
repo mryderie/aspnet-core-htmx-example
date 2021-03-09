@@ -1,0 +1,89 @@
+﻿@model MusicManager.Web.Helpers.PagingData
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var showEllipsis = true;
+}
+<nav hx-boost="true">
+    <ul class="pagination">
+        <li class="page-item @prevDisabled">
+            <a asp-page="./Index"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.PageIndex - 1)"
+               asp-route-currentFilter="@Model.CurrentFilter"
+               class="page-link"
+               aria-label="Previous">
+
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+
+        @for (var currentPage = 1; currentPage <= Model.TotalPages; currentPage++)
+        {
+            @*
+                -- if total pages more than 10:
+                --- show links for the first two pages
+                --- show link for the page before this page
+                --- show link for this page
+                --- show link for the page after this page
+                --- show links for the last two pages
+                --- otherwise show ellipsis
+            *@
+            if (Model.TotalPages > 10)
+            {
+                if (new[] { 1, 2,
+                            Model.PageIndex - 1, Model.PageIndex, Model.PageIndex + 1,
+                            Model.TotalPages - 1, Model.TotalPages }
+                        .Contains(currentPage))
+                {
+                    showEllipsis = true;
+
+                    <li class="page-item @(currentPage == Model.PageIndex ? "active" : null)">
+                        <a asp-page="./Index"
+                           asp-route-sortOrder="@Model.CurrentSort"
+                           asp-route-pageIndex="@currentPage"
+                           asp-route-currentFilter="@Model.CurrentFilter"
+                           class="page-link"
+                           aria-label="Page @(currentPage)">
+                            @(currentPage)
+                        </a>
+                    </li>
+                }
+                else if (showEllipsis)
+                {
+                    showEllipsis = false;
+
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link" aria-label="Spacer">&hellip;</a>
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="page-item @(currentPage == Model.PageIndex ? "active" : null)">
+                    <a asp-page="./Index"
+                       asp-route-sortOrder="@Model.CurrentSort"
+                       asp-route-pageIndex="@currentPage"
+                       asp-route-currentFilter="@Model.CurrentFilter"
+                       class="page-link"
+                       aria-label="Page @(currentPage)">
+                        @(currentPage)
+                    </a>
+                </li>
+            }
+        }
+        <li class="page-item @nextDisabled">
+            <a asp-page="./Index"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@Model.CurrentFilter"
+               class="page-link"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</nav>
