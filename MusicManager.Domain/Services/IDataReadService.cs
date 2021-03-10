@@ -8,6 +8,7 @@ namespace MusicManager.Domain.Services
 {
     public interface IDataReadService
     {
+        Task<ArtistDto> GetArtist(int id);
         Task<(IList<ArtistDto> pageItems, int totalCount)> GetArtistsPage(string search, string sortField, bool descending, int pageIndex, int pageSize);
     }
 }

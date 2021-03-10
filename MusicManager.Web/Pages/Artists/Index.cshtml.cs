@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MusicManager.Domain.Dtos;
 using MusicManager.Domain.Services;
@@ -60,6 +61,17 @@ namespace MusicManager.Web.Pages.Artists
 
             var result = await _dataReadService.GetArtistsPage(searchString, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
             Artists = new PaginatedList<ArtistDto>(result.pageItems, result.totalCount, pageIndex ?? 1, PAGE_SIZE, sortField, searchString);
+        }
+
+        public async Task<IActionResult> OnGetDetailsModal(int id)
+        {
+            var artist = await _dataReadService.GetArtist(id);
+            if (artist == null)
+            {
+                return NotFound();
+            }
+
+            return Partial("_DetailsModal", artist);
         }
     }
 }
