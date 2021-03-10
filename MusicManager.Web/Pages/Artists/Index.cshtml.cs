@@ -13,6 +13,7 @@ namespace MusicManager.Web.Pages.Artists
     {
         private const int PAGE_SIZE = 10;
         private readonly IDataReadService _dataReadService;
+        private readonly IDataWriteService _dataWriteService;
 
         // These Sort properties control the URL parameters for the sorting links in the table header
         public string NameSort { get; set; }
@@ -21,9 +22,10 @@ namespace MusicManager.Web.Pages.Artists
         public string UpdatedSort { get; set; }
         public PaginatedList<ArtistDto> Artists { get; set; }
 
-        public IndexModel(IDataReadService dataReadService)
+        public IndexModel(IDataReadService dataReadService, IDataWriteService dataWriteService)
         {
             _dataReadService = dataReadService;
+            _dataWriteService = dataWriteService;
         }
 
         public async Task OnGetAsync(string sortOrder, string currentFilter,
@@ -72,6 +74,17 @@ namespace MusicManager.Web.Pages.Artists
             }
 
             return Partial("_DetailsModal", artist);
+        }
+
+        public async Task<IActionResult> OnDeleteAsync(int id)
+        {
+            var result = await _dataWriteService.DeleteArtist(id);
+
+            if(!result)
+                return NotFound();
+
+            Response.Headers.Add("HX-Trigger", "gridItemDelete");
+            return new NoContentResult();
         }
     }
 }

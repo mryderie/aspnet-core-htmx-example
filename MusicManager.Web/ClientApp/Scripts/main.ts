@@ -79,6 +79,16 @@ document.body.addEventListener("htmx:afterSettle", function (e: any) {
     nprogress.done();
 });
 
+document.body.addEventListener('htmx:configRequest', function (e: any) {
+    // Append the id of the item to the URL so that it's consistent with other URL formats, and more REST-ful :)
+    // Easier than trying to dynamically update the form submit URL after HTMX has initialised it.
+    if (e.detail.verb === "delete") {
+        if (e.detail.parameters.deleteItemId) {
+            e.detail.path = e.detail.path + "/" + e.detail.parameters.deleteItemId;
+        }
+    }
+});
+
 document.body.addEventListener("gridItemEdit", function () {
     closeItemModal(() => htmx.ajax("GET", document.location.href));
 });

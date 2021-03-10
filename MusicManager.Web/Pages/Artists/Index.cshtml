@@ -108,7 +108,7 @@
                 Are you sure you want to delete <strong id="deleteItemName"></strong>?
             </div>
             <div class="modal-footer">
-                <!form hx-delete="/Artists"
+                <!form hx-delete="@Url.Page("./Index")"
                        onsubmit="AppLib.preventMultiSubmit()">
                     <input id="deleteItemId" name="deleteItemId" type="hidden" value="">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
