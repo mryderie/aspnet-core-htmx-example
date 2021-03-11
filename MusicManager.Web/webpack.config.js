@@ -25,6 +25,7 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
+                    // Styles
                     test: /\.s?[ac]ss$/,
                     use: [
                         MiniCssExtractPlugin.loader,
@@ -43,11 +44,25 @@ module.exports = (env, argv) => {
                     ]
                 },
                 {
+                    // Scripts
                     test: /\.tsx?$/,
                     loader: 'ts-loader',
                     exclude: /node_modules/,
 
                 },
+                {
+                    // Fonts
+                    test: /\.(woff|woff2|eot|ttf)$/,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                limit: 0, // Do not add to stylesheet as Base64
+                                name: '/fonts/[name]-[hash].[ext]'
+                            },
+                        },
+                    ],
+                }
             ]
         },
         optimization: {

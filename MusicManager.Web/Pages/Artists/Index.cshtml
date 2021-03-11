@@ -72,19 +72,13 @@
                     <a href="#"
                        hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
                        hx-trigger="click"
-                       hx-target="#itemModalContainer">
-                        Edit
-                    </a> |
+                       hx-target="#itemModalContainer"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
                     <a href="#"
                        hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
                        hx-trigger="click"
-                       hx-target="#itemModalContainer">
-                        Details
-                    </a> |
+                       hx-target="#itemModalContainer"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
                     <a href="#"
-                       onclick="AppLib.confirmDelete(@item.Id, '@item.Name')">
-                        Delete
-                    </a>
+                       onclick="AppLib.confirmDelete(@item.Id, '@item.Name')"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
                 </td>
             </tr>
         }
