@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicManager.Domain.DataAccess;
-using MusicManager.Domain.Dtos;
+using MusicManager.Domain.Dtos.Artist;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +18,10 @@ namespace MusicManager.Domain.Services
             _dbContext = dbContext;
         }
 
-        public async Task<ArtistDto> GetArtist(int id)
+        public async Task<ArtistViewDto> GetArtistView(int id)
         {
             return await _dbContext.Artists
-                                    .Select(a => new ArtistDto
+                                    .Select(a => new ArtistViewDto
                                     {
                                         Id = a.Id,
                                         Name = a.Name,
@@ -32,7 +32,18 @@ namespace MusicManager.Domain.Services
                                     .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<(IList<ArtistDto> pageItems, int totalCount)> GetArtistsPage(string search, string sortField,
+        public async Task<ArtistEditDto> GetArtistEdit(int id)
+        {
+            return await _dbContext.Artists
+                                    .Select(a => new ArtistEditDto
+                                    {
+                                        Id = a.Id,
+                                        Name = a.Name
+                                    })
+                                    .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<(IList<ArtistViewDto> pageItems, int totalCount)> GetArtistsPage(string search, string sortField,
                                                                                     bool descending, int pageIndex, int pageSize)
         {
             var query = _dbContext.Artists.AsQueryable();
@@ -70,7 +81,7 @@ namespace MusicManager.Domain.Services
 
             var totalCount = await query.CountAsync();
             var pageItems = await query
-                                    .Select(a => new ArtistDto
+                                    .Select(a => new ArtistViewDto
                                     {
                                         Id = a.Id,
                                         Name = a.Name,

@@ -2,7 +2,7 @@
 
 namespace MusicManager.Domain.Dtos
 {
-    public class BaseDto
+    public class BaseViewDto
     {
         public int Id { get; set; }
         public DateTime Created { get; set; }

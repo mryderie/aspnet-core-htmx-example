@@ -1,0 +1,42 @@
+﻿@model MusicManager.Domain.Dtos.Artist.ArtistEditDto
+@{
+    var isCreate = Model == null || Model.Id == 0;
+    var hxMethod = isCreate ? "hx-post" : "hx-put";
+    var submissionUrl = isCreate ?
+                            Url.Page("./Index")
+                            : Url.Page("./Index", values: new { id = Model.Id });
+    var modalTitle = isCreate ? "Create Artist" : "Update Artist";
+}
+
+<div id="itemModalBackdrop" class="modal-backdrop fade show" style="display:block;"></div>
+<div id="itemModal" class="modal fade show" tabindex="-1" style="display:block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!form @(hxMethod)="@(submissionUrl)"
+                   hx-trigger="submit[AppLib.isFormValid(submitter)]"
+                   hx-target="#itemModalContainer">
+                <div class="modal-header">
+                    <h5 class="modal-title">@modalTitle</h5>
+                    <button type="button" class="close" onclick="AppLib.closeItemModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="AppLib.closeItemModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    @Html.AntiForgeryToken()
+                </div>
+            </!form>
+        </div>
+    </div>
+</div>

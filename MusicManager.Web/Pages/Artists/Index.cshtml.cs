@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MusicManager.Domain.Dtos;
+using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
 
@@ -20,7 +20,7 @@ namespace MusicManager.Web.Pages.Artists
         public string AlbumCountSort { get; set; }
         public string CreatedSort { get; set; }
         public string UpdatedSort { get; set; }
-        public PaginatedList<ArtistDto> Artists { get; set; }
+        public PaginatedList<ArtistViewDto> Artists { get; set; }
 
         public IndexModel(IDataReadService dataReadService, IDataWriteService dataWriteService)
         {
@@ -62,18 +62,71 @@ namespace MusicManager.Web.Pages.Artists
             }
 
             var result = await _dataReadService.GetArtistsPage(searchString, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
-            Artists = new PaginatedList<ArtistDto>(result.pageItems, result.totalCount, pageIndex ?? 1, PAGE_SIZE, sortField, searchString);
+            Artists = new PaginatedList<ArtistViewDto>(result.pageItems, result.totalCount, pageIndex ?? 1, PAGE_SIZE, sortField, searchString);
         }
 
         public async Task<IActionResult> OnGetDetailsModal(int id)
         {
-            var artist = await _dataReadService.GetArtist(id);
+            var artist = await _dataReadService.GetArtistView(id);
             if (artist == null)
             {
                 return NotFound();
             }
 
             return Partial("_DetailsModal", artist);
+        }
+
+        public async Task<IActionResult> OnGetEditModal(int? id)
+        {
+            // Create item form
+            if (!id.HasValue)
+                return Partial("_EditModal");
+
+            // Update item form
+            var artist = await _dataReadService.GetArtistEdit(id.Value);
+            if (artist == null)
+            {
+                return NotFound();
+            }
+
+            return Partial("_EditModal", artist);
+        }
+
+        public async Task<IActionResult> OnPostAsync(ArtistEditDto model)
+        {
+            //temp - to test handling a server-side validation error
+            if (model.Name == "error")
+                ModelState.AddModelError("Name", "Server-side validation error...");
+
+            if (ModelState.IsValid)
+            {
+                await _dataWriteService.CreateArtist(model);
+
+                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                return new NoContentResult();
+            }
+
+            return Partial("_EditModal", model);
+        }
+
+        public async Task<IActionResult> OnPutAsync(int id, ArtistEditDto model)
+        {
+            //temp - to test handling a server-side validation error
+            if (model.Name == "error")
+                ModelState.AddModelError("Name", "Server-side validation error...");
+
+            if (ModelState.IsValid)
+            {
+                var result = await _dataWriteService.UpdateArtist(id, model);
+
+                if (!result)
+                    return NotFound();
+
+                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                return new NoContentResult();
+            }
+
+            return Partial("_EditModal", model);
         }
 
         public async Task<IActionResult> OnDeleteAsync(int id)

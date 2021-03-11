@@ -1,4 +1,4 @@
-﻿using MusicManager.Domain.Dtos;
+﻿using MusicManager.Domain.Dtos.Artist;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +8,9 @@ namespace MusicManager.Domain.Services
 {
     public interface IDataReadService
     {
-        Task<ArtistDto> GetArtist(int id);
-        Task<(IList<ArtistDto> pageItems, int totalCount)> GetArtistsPage(string search, string sortField, bool descending, int pageIndex, int pageSize);
+        Task<ArtistViewDto> GetArtistView(int id);
+        Task<(IList<ArtistViewDto> pageItems, int totalCount)> GetArtistsPage(string search, string sortField, bool descending, int pageIndex, int pageSize);
+
+        Task<ArtistEditDto> GetArtistEdit(int id);
     }
 }
