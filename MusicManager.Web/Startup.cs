@@ -31,6 +31,8 @@ namespace MusicManager.Web
             services.AddScoped<IDataReadService, DataReadService>();
             services.AddScoped<IDataWriteService, DataWriteService>();
 
+            services.AddHttpContextAccessor();
+
             services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddRazorPages();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,36 @@ namespace MusicManager.Web.Pages.Artists
         private readonly IDataReadService _dataReadService;
         private readonly IDataWriteService _dataWriteService;
 
+        private enum Sort
+        {
+            NameAsc,
+            NameDesc,
+            AlbumCountAsc,
+            AlbumCountDesc,
+            CreatedAsc,
+            CreatedDesc,
+            UpdatedAsc,
+            UpdatedDesc
+        }
+
+        private Dictionary<Sort, string> _sorts = new Dictionary<Sort, string>
+        {
+            { Sort.NameAsc, "name_asc" },
+            { Sort.NameDesc, "name_desc" },
+            { Sort.AlbumCountAsc, "albumCount_asc" },
+            { Sort.AlbumCountDesc, "albumCount_desc" },
+            { Sort.CreatedAsc, "created_asc" },
+            { Sort.CreatedDesc, "created_desc" },
+            { Sort.UpdatedAsc, "updated_asc" },
+            { Sort.UpdatedDesc, "updated_desc" },
+        };
+
         // These Sort properties control the URL parameters for the sorting links in the table header
         public string NameSort { get; set; }
         public string AlbumCountSort { get; set; }
         public string CreatedSort { get; set; }
         public string UpdatedSort { get; set; }
+        public string CurrentSort { get; set; }
         public PaginatedList<ArtistViewDto> Artists { get; set; }
 
         public IndexModel(IDataReadService dataReadService, IDataWriteService dataWriteService)
@@ -31,12 +57,12 @@ namespace MusicManager.Web.Pages.Artists
         public async Task OnGetAsync(string sortOrder, string currentFilter,
                                     string searchString, int? pageIndex)
         {
-            // Sorting by Name asc is the default, so no parameter is needed in the URL from this case
-            // todo - fix these magic strings!
-            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "name_asc";
-            AlbumCountSort = sortOrder == "albumCount_asc" ? "albumCount_desc" : "albumCount_asc";
-            CreatedSort = sortOrder == "created_asc" ? "created_desc" : "created_asc";
-            UpdatedSort = sortOrder == "updated_asc" ? "updated_desc" : "updated_asc";
+            // name_asc is the default sort value, so an unset or invalid parameter value will be replaced with that value
+            CurrentSort = _sorts.ContainsValue(sortOrder) ? sortOrder : _sorts[Sort.NameAsc];
+            NameSort = CurrentSort == _sorts[Sort.NameAsc] ? _sorts[Sort.NameDesc] : _sorts[Sort.NameAsc];
+            AlbumCountSort = CurrentSort == _sorts[Sort.AlbumCountAsc] ? _sorts[Sort.AlbumCountDesc] : _sorts[Sort.AlbumCountAsc];
+            CreatedSort = CurrentSort == _sorts[Sort.CreatedAsc] ? _sorts[Sort.CreatedDesc] : _sorts[Sort.CreatedAsc];
+            UpdatedSort = CurrentSort == _sorts[Sort.UpdatedAsc] ? _sorts[Sort.UpdatedDesc] : _sorts[Sort.UpdatedAsc];
 
             // For the initial search, searchString parameter is set. For subsequent refreshes/pages, currentFilter is set.
             if (searchString != null)

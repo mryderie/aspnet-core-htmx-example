@@ -30,24 +30,32 @@
     <thead>
         <tr>
             <th hx-boost="true">
-                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort" asp-route-currentFilter="@Model.Artists.PagingData.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Artists[0].Name)
-                </a>
+                <sort-link page="./Index"
+                           route-sortOrder="@Model.NameSort"
+                           route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
+                           current-sort="@Model.CurrentSort"
+                           display-name="@Html.DisplayNameFor(model => model.Artists[0].Name)" />
             </th>
             <th hx-boost="true">
-                <a asp-page="./Index" asp-route-sortOrder="@Model.AlbumCountSort" asp-route-currentFilter="@Model.Artists.PagingData.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Artists[0].AlbumCount)
-                </a>
+                <sort-link page="./Index"
+                           route-sortOrder="@Model.AlbumCountSort"
+                           route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
+                           current-sort="@Model.CurrentSort"
+                           display-name="@Html.DisplayNameFor(model => model.Artists[0].AlbumCount)" />
             </th>
             <th hx-boost="true">
-                <a asp-page="./Index" asp-route-sortOrder="@Model.CreatedSort" asp-route-currentFilter="@Model.Artists.PagingData.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Artists[0].Created)
-                </a>
+                <sort-link page="./Index"
+                           route-sortOrder="@Model.CreatedSort"
+                           route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
+                           current-sort="@Model.CurrentSort"
+                           display-name="@Html.DisplayNameFor(model => model.Artists[0].Created)" />
             </th>
             <th hx-boost="true">
-                <a asp-page="./Index" asp-route-sortOrder="@Model.UpdatedSort" asp-route-currentFilter="@Model.Artists.PagingData.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Artists[0].Updated)
-                </a>
+                <sort-link page="./Index"
+                           route-sortOrder="@Model.UpdatedSort"
+                           route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
+                           current-sort="@Model.CurrentSort"
+                           display-name="@Html.DisplayNameFor(model => model.Artists[0].Updated)" />
             </th>
             <th></th>
         </tr>
