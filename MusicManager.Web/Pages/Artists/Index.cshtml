@@ -18,10 +18,11 @@
 <form asp-page="./Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Search by name:
-            <input type="text" name="SearchString" value="@Model.Artists.PagingData.CurrentFilter" />
+            Search:
+            <input type="text" name="searchString" value="@Model.Artists.PagingData.CurrentFilter" />
+            <input type="hidden" name="sortOrder" value="@Model.CurrentSort" />
             <input type="submit" value="Search" class="btn btn-primary" /> |
-            <a asp-page="./Index">Back to full List</a>
+            <a asp-page="./Index" asp-route-sortOrder="@Model.CurrentSort">Back to full List</a>
         </p>
     </div>
 </form>

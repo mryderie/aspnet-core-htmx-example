@@ -88,7 +88,7 @@ namespace MusicManager.Web.Pages.Artists
             }
 
             var result = await _dataReadService.GetArtistsPage(searchString, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
-            Artists = new PaginatedList<ArtistViewDto>(result.pageItems, result.totalCount, pageIndex ?? 1, PAGE_SIZE, sortField, searchString);
+            Artists = new PaginatedList<ArtistViewDto>(result.pageItems, result.totalCount, pageIndex ?? 1, PAGE_SIZE, CurrentSort, searchString);
         }
 
         public async Task<IActionResult> OnGetDetailsModal(int id)

@@ -18,31 +18,7 @@ namespace MusicManager.Web.Helpers
             _accessor = accessor;
             _generator = generator;
         }
-        /*
-        <sort-header display-name="Model.Artists[0].Name"
-                    current-sort-param="@Model.CurrentSort"
-                    page="./Index"        
-                    route-sortOrder="@Model.NameSort"
-                    route-currentFilter="@Model.Artists.PagingData.CurrentFilter" />
 
-
-
-
-        <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort" asp-route-currentFilter="@Model.Artists.PagingData.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Artists[0].Name)
-
-                    @if (Model.NameSort.EndsWith("_asc"))
-                    {
-                        <i class="bi-sort-down" role="img" aria-label="Sort Ascending"></i>
-                    }
-                    else
-                    {
-                        <i class="bi-sort-up-alt" role="img" aria-label="Sort Descending"></i>
-                    }
-
-                </a>
-
-        */
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             // extract the mandatory attribute values
