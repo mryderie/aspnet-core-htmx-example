@@ -4,28 +4,31 @@
     ViewData["Title"] = "Artists";
 }
 
-<h1>Artists</h1>
+<h1 class="mb-5">Artists</h1>
 
-<p>
-    <a href="#"
-       hx-get="@Url.Page("./Index", "EditModal")"
-       hx-trigger="click"
-       hx-target="#itemModalContainer">
-        Add Artist
-    </a>
-</p>
-
-<form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Search:
-            <input type="text" name="searchString" value="@Model.Artists.PagingData.CurrentFilter" />
-            <input type="hidden" name="sortOrder" value="@Model.CurrentSort" />
-            <input type="submit" value="Search" class="btn btn-primary" /> |
-            <a asp-page="./Index" asp-route-sortOrder="@Model.CurrentSort">Back to full List</a>
-        </p>
+<div class="row">
+    <div class="col-md text-right text-md-left ">
+        <a href="#"
+            hx-get="@Url.Page("./Index", "EditModal")"
+            hx-trigger="click"
+            hx-target="#itemModalContainer"
+            class="btn btn-outline-primary mb-1 mb-md-0">
+            <i class="bi-plus-circle" role="img" aria-label="Add Artist"></i>
+            Add Artist
+        </a>
     </div>
-</form>
+    <div class="col-md text-right pb-3">
+        <form asp-page="./Index" method="get">
+            <input type="text" name="searchString" value="@Model.Artists.PagingData.CurrentFilter" />
+            <input type="hidden" name="sortOrder" value="@Model.Artists.PagingData.CurrentSort" />
+            <input type="submit" value="Search" class="btn btn-primary" />
+            @if (!string.IsNullOrWhiteSpace(Model.Artists.PagingData.CurrentFilter))
+            {
+                <a asp-page="./Index" asp-route-sortOrder="@Model.Artists.PagingData.CurrentSort" class="btn btn-secondary">Clear</a>
+            }
+        </form>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -34,28 +37,28 @@
                 <sort-link page="./Index"
                            route-sortOrder="@Model.NameSort"
                            route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
-                           current-sort="@Model.CurrentSort"
+                           current-sort="@Model.Artists.PagingData.CurrentSort"
                            display-name="@Html.DisplayNameFor(model => model.Artists[0].Name)" />
             </th>
             <th hx-boost="true">
                 <sort-link page="./Index"
                            route-sortOrder="@Model.AlbumCountSort"
                            route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
-                           current-sort="@Model.CurrentSort"
+                           current-sort="@Model.Artists.PagingData.CurrentSort"
                            display-name="@Html.DisplayNameFor(model => model.Artists[0].AlbumCount)" />
             </th>
             <th hx-boost="true">
                 <sort-link page="./Index"
                            route-sortOrder="@Model.CreatedSort"
                            route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
-                           current-sort="@Model.CurrentSort"
+                           current-sort="@Model.Artists.PagingData.CurrentSort"
                            display-name="@Html.DisplayNameFor(model => model.Artists[0].Created)" />
             </th>
             <th hx-boost="true">
                 <sort-link page="./Index"
                            route-sortOrder="@Model.UpdatedSort"
                            route-currentFilter="@Model.Artists.PagingData.CurrentFilter"
-                           current-sort="@Model.CurrentSort"
+                           current-sort="@Model.Artists.PagingData.CurrentSort"
                            display-name="@Html.DisplayNameFor(model => model.Artists[0].Updated)" />
             </th>
             <th></th>
@@ -77,17 +80,20 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Updated)
                 </td>
-                <td>
+                <td class="text-right">
                     <a href="#"
                        hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
                        hx-trigger="click"
-                       hx-target="#itemModalContainer"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
+                       hx-target="#itemModalContainer"
+                       class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
                     <a href="#"
                        hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
                        hx-trigger="click"
-                       hx-target="#itemModalContainer"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
+                       hx-target="#itemModalContainer"
+                       class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
                     <a href="#"
-                       onclick="AppLib.confirmDelete(@item.Id, '@item.Name')"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
+                       onclick="AppLib.confirmDelete(@item.Id, '@item.Name')"
+                       class="btn btn-outline-primary"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
                 </td>
             </tr>
         }

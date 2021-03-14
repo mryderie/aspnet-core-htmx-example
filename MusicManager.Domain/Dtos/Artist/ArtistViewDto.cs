@@ -10,7 +10,7 @@ namespace MusicManager.Domain.Dtos.Artist
     {
         public string Name { get; set; }
         
-        [DisplayName("Album Count")]
+        [DisplayName("Albums")]
         public int AlbumCount { get; set; }
     }
 }
