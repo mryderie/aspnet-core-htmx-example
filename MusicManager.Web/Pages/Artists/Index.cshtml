@@ -6,8 +6,8 @@
 
 <h1 class="mb-5">Artists</h1>
 
-<div class="row">
-    <div class="col-md text-right text-md-left ">
+<div class="row mb-3">
+    <div class="col-md-3 text-right text-md-left">
         <a href="#"
             hx-get="@Url.Page("./Index", "EditModal")"
             hx-trigger="click"
@@ -17,14 +17,20 @@
             Add Artist
         </a>
     </div>
-    <div class="col-md text-right pb-3">
-        <form asp-page="./Index" method="get">
-            <input type="text" name="searchString" value="@Model.Artists.PagingData.CurrentFilter" />
+    <div class="col-md-9">
+        <form asp-page="./Index" method="get" class="form-inline justify-content-end">
+            <input type="text" name="searchString" value="@Model.Artists.PagingData.CurrentFilter" class="form-control mr-2 w-50" />
             <input type="hidden" name="sortOrder" value="@Model.Artists.PagingData.CurrentSort" />
-            <input type="submit" value="Search" class="btn btn-primary" />
+            <button type="submit" class="btn btn-primary">
+                <i class="bi-search" role="img" aria-label="Search"></i>
+                Search
+            </button>
             @if (!string.IsNullOrWhiteSpace(Model.Artists.PagingData.CurrentFilter))
             {
-                <a asp-page="./Index" asp-route-sortOrder="@Model.Artists.PagingData.CurrentSort" class="btn btn-secondary">Clear</a>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.Artists.PagingData.CurrentSort" class="btn btn-secondary ml-2">
+                    <i class="bi-backspace" role="img" aria-label="Clear"></i>
+                    Clear
+                </a>
             }
         </form>
     </div>
