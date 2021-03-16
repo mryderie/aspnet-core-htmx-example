@@ -1,4 +1,5 @@
-﻿using MusicManager.Domain.Dtos.Artist;
+﻿using MusicManager.Domain.Dtos.Album;
+using MusicManager.Domain.Dtos.Artist;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +13,11 @@ namespace MusicManager.Domain.Services
         Task<(IList<ArtistViewDto> pageItems, int totalCount)> GetArtistsPage(string search, string sortField, bool descending, int pageIndex, int pageSize);
 
         Task<ArtistEditDto> GetArtistEdit(int id);
+
+
+        Task<AlbumViewDto> GetAlbumView(int id);
+        Task<(IList<AlbumViewDto> pageItems, int totalCount)> GetAlbumsPage(string search, string sortField, bool descending, int pageIndex, int pageSize);
+
+        //Task<AlbumEditDto> GetAlbumEdit(int id);
     }
 }
