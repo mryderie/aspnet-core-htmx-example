@@ -4,29 +4,26 @@
     ViewData["Title"] = "Albums";
 }
 
+<h1 class="mb-5">
+    Albums
+    <a href="#"
+        hx-get="@Url.Page("./Index", "EditModal")"
+        hx-trigger="click"
+        hx-target="#itemModalContainer"
+        class="btn btn-outline-primary mb-2">
+        <i class="bi-plus-circle" role="img" aria-label="Add Album"></i>
+        Add Album
+    </a>
+</h1>
 
-@if (Model.Artist == null)
-{
-    <h1 class="mb-5">Albums</h1>
-}
-else
-{
-    <h1>Albums</h1>
-    <h2 class="mb-5 text-muted"><em>@Model.Artist.Name</em></h2>
-}
 
 <div class="row mb-3">
-    <div class="col-md-3 text-right text-md-left">
-        <a href="#"
-           hx-get="@Url.Page("./Index", "EditModal")"
-           hx-trigger="click"
-           hx-target="#itemModalContainer"
-           class="btn btn-outline-primary mb-1 mb-md-0">
-            <i class="bi-plus-circle" role="img" aria-label="Add Album"></i>
-            Add Album
-        </a>
+    <div class="col-12 col-md-3 text-right text-md-left">
+        <select asp-items="Model.ArtistList" class="custom-select mb-1 mb-md-0">
+            <option selected>- All Artists -</option>
+        </select>
     </div>
-    <div class="col-md-9">
+    <div class="col-12 col-md-9">
         @await Html.PartialAsync("_GridSearchForm", Model.Albums.PagingData)
     </div>
 </div>

@@ -98,7 +98,16 @@ namespace MusicManager.Domain.Services
             return (pageItems, totalCount);
         }
 
-        
+        public async Task<IList<(int artistId, string artistName)>> GetArtistNames()
+        {
+            var result = await _dbContext.Artists.OrderBy(a => a.Name)
+                                                .Select(a => new { a.Id, a.Name })
+                                                .ToListAsync();
+
+            return result.Select(a => (a.Id, a.Name)).ToList();
+        }
+
+
         // Albums
         public async Task<AlbumViewDto> GetAlbumView(int id)
         {
@@ -128,14 +137,14 @@ namespace MusicManager.Domain.Services
         //                            .FirstOrDefaultAsync(a => a.Id == id);
         //}
 
-        public async Task<(IList<AlbumViewDto> pageItems, ArtistViewDto artist, int totalCount)> GetAlbumsPage(int? artistId, string search, string sortField,
-                                                                                                                bool descending, int pageIndex, int pageSize)
+        public async Task<(IList<AlbumViewDto> pageItems, int totalCount)> GetAlbumsPage(int? artistId, string search, string sortField,
+                                                                                        bool descending, int pageIndex, int pageSize)
         {
             var query = _dbContext.Albums.AsQueryable();
 
             if (artistId.HasValue)
                 query = query.Where(a => a.ArtistId == artistId);
-            
+
             if (!string.IsNullOrWhiteSpace(search))
                 query = query.Where(a => EF.Functions.Like(a.Title, $"%{search}%")
                                         || EF.Functions.Like(a.Artist.Name, $"%{search}%"));
@@ -197,11 +206,7 @@ namespace MusicManager.Domain.Services
                                     .Take(pageSize)
                                     .ToListAsync();
 
-            ArtistViewDto artist = null;
-            if (artistId.HasValue)
-                artist = await GetArtistView(artistId.Value);
-
-            return (pageItems, artist, totalCount);
+            return (pageItems, totalCount);
         }
     }
 }

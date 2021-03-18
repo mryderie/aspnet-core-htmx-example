@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MusicManager.Domain.Dtos.Album;
 using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Services;
@@ -58,7 +59,7 @@ namespace MusicManager.Web.Pages.Albums
         public string UpdatedSort { get; set; }
 
         public PaginatedList<AlbumViewDto> Albums { get; set; }
-        public ArtistViewDto Artist { get; set; }
+        public List<SelectListItem> ArtistList { get; set; }
 
         public IndexModel(IDataReadService dataReadService, IDataWriteService dataWriteService)
         {
@@ -99,13 +100,13 @@ namespace MusicManager.Web.Pages.Albums
             }
 
             var result = await _dataReadService.GetAlbumsPage(artistId, currentFilter, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
+            var artistNames = await _dataReadService.GetArtistNames();
 
-            if(artistId.HasValue && result.artist == null)
+            if(artistId.HasValue
+                && !artistNames.Any(a => a.artistId == artistId.Value))
             {
                 return NotFound();
             }
-
-            Artist = result.artist;
 
             var parameters = new Dictionary<string, string> {
                 { ParamName.PageIndex, (pageIndex ?? 1).ToString() },
@@ -115,6 +116,9 @@ namespace MusicManager.Web.Pages.Albums
             };
 
             Albums = new PaginatedList<AlbumViewDto>(result.pageItems, result.totalCount, PAGE_SIZE, pageIndex ?? 1, parameters);
+            ArtistList = artistNames.Select(a => new SelectListItem(a.artistName, a.artistId.ToString(),
+                                                                    artistId.HasValue && artistId.Value == a.artistId))
+                                                                .ToList();
 
             return Page();
         }

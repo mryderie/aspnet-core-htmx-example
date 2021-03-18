@@ -4,20 +4,20 @@
     ViewData["Title"] = "Artists";
 }
 
-<h1 class="mb-5">Artists</h1>
+<h1 class="mb-5">
+    Artists
+    <a href="#"
+       hx-get="@Url.Page("./Index", "EditModal")"
+       hx-trigger="click"
+       hx-target="#itemModalContainer"
+       class="btn btn-outline-primary mb-2">
+        <i class="bi-plus-circle" role="img" aria-label="Add Artist"></i>
+        Add Artist
+    </a>
+</h1>
 
 <div class="row mb-3">
-    <div class="col-md-3 text-right text-md-left">
-        <a href="#"
-           hx-get="@Url.Page("./Index", "EditModal")"
-           hx-trigger="click"
-           hx-target="#itemModalContainer"
-           class="btn btn-outline-primary mb-1 mb-md-0">
-            <i class="bi-plus-circle" role="img" aria-label="Add Artist"></i>
-            Add Artist
-        </a>
-    </div>
-    <div class="col-md-9">
+    <div class="col-md-9 offset-md-3">
         @await Html.PartialAsync("_GridSearchForm", Model.Artists.PagingData)
     </div>
 </div>

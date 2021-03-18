@@ -14,10 +14,14 @@ namespace MusicManager.Domain.Services
 
         Task<ArtistEditDto> GetArtistEdit(int id);
 
+        Task<IList<(int artistId, string artistName)>> GetArtistNames();
+
 
         Task<AlbumViewDto> GetAlbumView(int id);
-        Task<(IList<AlbumViewDto> pageItems, ArtistViewDto artist, int totalCount)> GetAlbumsPage(int? artistId, string search, string sortField,
-                                                                                                    bool descending, int pageIndex, int pageSize);
+        Task<(IList<AlbumViewDto> pageItems, int totalCount)> GetAlbumsPage(int? artistId, string search, string sortField,
+                                                                            bool descending, int pageIndex, int pageSize);
+
+        
 
         //Task<AlbumEditDto> GetAlbumEdit(int id);
     }
