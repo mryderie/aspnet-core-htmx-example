@@ -4,7 +4,16 @@
     ViewData["Title"] = "Albums";
 }
 
-<h1 class="mb-5">Albums</h1>
+
+@if (Model.Artist == null)
+{
+    <h1 class="mb-5">Albums</h1>
+}
+else
+{
+    <h1>Albums</h1>
+    <h2 class="mb-5 text-muted"><em>@Model.Artist.Name</em></h2>
+}
 
 <div class="row mb-3">
     <div class="col-md-3 text-right text-md-left">

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MusicManager.Domain.Dtos.Album;
+using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
 
@@ -57,6 +58,7 @@ namespace MusicManager.Web.Pages.Albums
         public string UpdatedSort { get; set; }
 
         public PaginatedList<AlbumViewDto> Albums { get; set; }
+        public ArtistViewDto Artist { get; set; }
 
         public IndexModel(IDataReadService dataReadService, IDataWriteService dataWriteService)
         {
@@ -64,8 +66,8 @@ namespace MusicManager.Web.Pages.Albums
             _dataWriteService = dataWriteService;
         }
 
-        public async Task OnGetAsync(string sortOrder, string currentFilter,
-                                    string searchString, int? artistId, int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(string sortOrder, string currentFilter,
+                                                    string searchString, int? artistId, int? pageIndex)
         {
             // title_asc is the default sort value, so an unset or invalid parameter value will be replaced with that value
             var currentSort = _sorts.ContainsValue(sortOrder) ? sortOrder : _sorts[Sort.TitleAsc];
@@ -96,7 +98,14 @@ namespace MusicManager.Web.Pages.Albums
                 }
             }
 
-            var result = await _dataReadService.GetAlbumsPage(currentFilter, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
+            var result = await _dataReadService.GetAlbumsPage(artistId, currentFilter, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
+
+            if(artistId.HasValue && result.artist == null)
+            {
+                return NotFound();
+            }
+
+            Artist = result.artist;
 
             var parameters = new Dictionary<string, string> {
                 { ParamName.PageIndex, (pageIndex ?? 1).ToString() },
@@ -106,6 +115,8 @@ namespace MusicManager.Web.Pages.Albums
             };
 
             Albums = new PaginatedList<AlbumViewDto>(result.pageItems, result.totalCount, PAGE_SIZE, pageIndex ?? 1, parameters);
+
+            return Page();
         }
     }
 }

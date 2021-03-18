@@ -60,7 +60,9 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.AlbumCount)
+                    <a hx-boost="true" asp-page="/Albums/Index" asp-route-artistId="@item.Id">
+                        @Html.DisplayFor(modelItem => item.AlbumCount)
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)
