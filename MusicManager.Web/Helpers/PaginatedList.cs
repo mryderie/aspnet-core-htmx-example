@@ -10,9 +10,9 @@ namespace MusicManager.Web.Helpers
     {
         public PagingData PagingData { get; private set; }
 
-        public PaginatedList(IList<T> items, int totalCount, int pageIndex, int pageSize, string currentSort = null, string currentFilter = null)
+        public PaginatedList(IList<T> items, int totalCount, int pageSize, int pageIndex, IDictionary<string, string> parameters)
         {
-            PagingData = new PagingData(totalCount, pageIndex, pageSize, currentSort, currentFilter);
+            PagingData = new PagingData(totalCount, pageSize, pageIndex, parameters);
             AddRange(items);
         }
     }

@@ -7,21 +7,25 @@ namespace MusicManager.Web.Helpers
 {
     public class PagingData
     {
-        public PagingData(int totalCount, int pageIndex, int pageSize, string currentSort = null, string currentFilter = null)
+        public PagingData(int totalCount, int pageSize, int pageIndex, IDictionary<string, string> parameters)
         {
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
-            CurrentSort = currentSort;
-            CurrentFilter = currentFilter;
+            Parameters = parameters;
+        }
+
+        public string this[string paramName]
+        {
+            get
+            {
+                return Parameters.ContainsKey(paramName) ? Parameters[paramName] : null;
+            }
         }
 
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
-
-        public string CurrentSort { get; private set; }
-        public string CurrentFilter { get; private set; }
-
+        public IDictionary<string, string> Parameters { get; private set; }
 
         public bool HasPreviousPage
         {
@@ -37,6 +41,12 @@ namespace MusicManager.Web.Helpers
             {
                 return (PageIndex < TotalPages);
             }
+        }
+
+        public IDictionary<string, string> ParametersExcept(params string[] paramNames)
+        {
+            return Parameters.Where(p => !paramNames.Contains(p.Key))
+                            .ToDictionary(p => p.Key, p => p.Value);
         }
     }
 }

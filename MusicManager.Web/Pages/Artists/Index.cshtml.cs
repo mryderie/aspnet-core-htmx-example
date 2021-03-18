@@ -57,20 +57,17 @@ namespace MusicManager.Web.Pages.Artists
                                     string searchString, int? pageIndex)
         {
             // name_asc is the default sort value, so an unset or invalid parameter value will be replaced with that value
-            var currentSortOrder = _sorts.ContainsValue(sortOrder) ? sortOrder : _sorts[Sort.NameAsc];
-            NameSort = currentSortOrder == _sorts[Sort.NameAsc] ? _sorts[Sort.NameDesc] : _sorts[Sort.NameAsc];
-            AlbumCountSort = currentSortOrder == _sorts[Sort.AlbumCountAsc] ? _sorts[Sort.AlbumCountDesc] : _sorts[Sort.AlbumCountAsc];
-            CreatedSort = currentSortOrder == _sorts[Sort.CreatedAsc] ? _sorts[Sort.CreatedDesc] : _sorts[Sort.CreatedAsc];
-            UpdatedSort = currentSortOrder == _sorts[Sort.UpdatedAsc] ? _sorts[Sort.UpdatedDesc] : _sorts[Sort.UpdatedAsc];
+            var currentSort = _sorts.ContainsValue(sortOrder) ? sortOrder : _sorts[Sort.NameAsc];
+            NameSort = currentSort == _sorts[Sort.NameAsc] ? _sorts[Sort.NameDesc] : _sorts[Sort.NameAsc];
+            AlbumCountSort = currentSort == _sorts[Sort.AlbumCountAsc] ? _sorts[Sort.AlbumCountDesc] : _sorts[Sort.AlbumCountAsc];
+            CreatedSort = currentSort == _sorts[Sort.CreatedAsc] ? _sorts[Sort.CreatedDesc] : _sorts[Sort.CreatedAsc];
+            UpdatedSort = currentSort == _sorts[Sort.UpdatedAsc] ? _sorts[Sort.UpdatedDesc] : _sorts[Sort.UpdatedAsc];
 
             // For the initial search, searchString parameter is set. For subsequent refreshes/pages, currentFilter is set.
             if (searchString != null)
             {
                 pageIndex = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
+                currentFilter = searchString;
             }
 
             string sortField = null;
@@ -86,8 +83,15 @@ namespace MusicManager.Web.Pages.Artists
                 }
             }
 
-            var result = await _dataReadService.GetArtistsPage(searchString, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
-            Artists = new PaginatedList<ArtistViewDto>(result.pageItems, result.totalCount, pageIndex ?? 1, PAGE_SIZE, currentSortOrder, searchString);
+            var result = await _dataReadService.GetArtistsPage(currentFilter, sortField, sortDesc, pageIndex ?? 1, PAGE_SIZE);
+
+            var parameters = new Dictionary<string, string> {
+                { ParamName.PageIndex, (pageIndex ?? 1).ToString() },
+                { ParamName.SortOrder, currentSort },
+                { ParamName.CurrentFilter, currentFilter }
+            };
+
+            Artists = new PaginatedList<ArtistViewDto>(result.pageItems, result.totalCount, PAGE_SIZE, pageIndex ?? 1, parameters);
         }
 
         public async Task<IActionResult> OnGetDetailsModal(int id)
