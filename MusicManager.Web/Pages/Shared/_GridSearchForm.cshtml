@@ -1,6 +1,6 @@
 ﻿@model PagingData 
 
-<form asp-page="./Index" method="get" class="form-inline justify-content-end">
+<form asp-page="./Index" method="get" hx-boost="true" class="form-inline justify-content-end">
     <input type="text" name="searchString" value="@Model[ParamName.CurrentFilter]" class="form-control mr-2 w-50" />
     @foreach (var param in Model.Parameters)
     {
@@ -16,7 +16,7 @@
     </button>
     @if (!string.IsNullOrWhiteSpace(Model[ParamName.CurrentFilter]))
     {
-        <a asp-page="./Index" asp-all-route-data="Model.ParametersExcept(ParamName.CurrentFilter, ParamName.PageIndex)" class="btn btn-secondary ml-2">
+        <a hx-boost="true" asp-page="./Index" asp-all-route-data="Model.ParametersExcept(ParamName.CurrentFilter, ParamName.PageIndex)" class="btn btn-secondary ml-2">
             <i class="bi-backspace" role="img" aria-label="Clear"></i>
             Clear
         </a>

@@ -18,12 +18,34 @@
 
 
 <div class="row mb-3">
-    <div class="col-12 col-md-3 text-right text-md-left">
-        <select asp-items="Model.ArtistList" class="custom-select mb-1 mb-md-0">
-            <option selected>- All Artists -</option>
-        </select>
+    <div class="col-12 col-md-4 text-right text-md-left">
+        <form asp-page="./Index" method="get" hx-boost="true" class="form-inline justify-content-start">
+            @foreach (var param in Model.Albums.PagingData.Parameters)
+            {
+                if (!string.IsNullOrWhiteSpace(param.Value)
+                    && param.Key != ParamName.PageIndex // go to page 1 of search results
+                    && param.Key != ParamName.ArtistId)
+                {
+                    <input type="hidden" name="@param.Key" value="@param.Value" />
+                }
+            }
+            <select name="artistId" asp-items="Model.ArtistList" class="custom-select mb-1 mb-md-0 mr-2">
+                <option selected>- All Artists -</option>
+            </select>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi-funnel" role="img" aria-label="Go"></i>
+                Go
+            </button>
+            @if (!string.IsNullOrWhiteSpace(Model.Albums.PagingData.Parameters[ParamName.ArtistId]))
+            {
+                <a hx-boost="true" asp-page="./Index" asp-all-route-data="Model.Albums.PagingData.ParametersExcept(ParamName.ArtistId, ParamName.PageIndex)" class="btn btn-secondary ml-2">
+                    <i class="bi-backspace" role="img" aria-label="Clear"></i>
+                    Clear
+                </a>
+            }
+        </form>
     </div>
-    <div class="col-12 col-md-9">
+    <div class="col-12 col-md-8">
         @await Html.PartialAsync("_GridSearchForm", Model.Albums.PagingData)
     </div>
 </div>
