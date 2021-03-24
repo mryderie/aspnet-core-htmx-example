@@ -53,6 +53,14 @@
         </tr>
     </thead>
     <tbody>
+        @if(!Model.Artists.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center">
+                    <em>There are no items to display.</em>
+                </td>
+            </tr>
+        }
         @foreach (var item in Model.Artists)
         {
             <tr>

@@ -18,5 +18,7 @@ namespace MusicManager.Domain.Dtos.Album
 
         [DisplayName("Artist")]
         public string ArtistName { get; set; }
+
+        public IList<string> Genres { get; set; }
     }
 }

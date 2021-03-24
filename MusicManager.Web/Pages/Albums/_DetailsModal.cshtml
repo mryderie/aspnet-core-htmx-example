@@ -1,22 +1,31 @@
-﻿@model MusicManager.Domain.Dtos.Artist.ArtistViewDto
+﻿@model MusicManager.Domain.Dtos.Album.AlbumViewDto
 
 <div id="itemModalBackdrop" class="modal-backdrop fade show" style="display:block;"></div>
 <div id="itemModal" class="modal fade show" tabindex="-1" style="display:block;">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Artist Details</h5>
+                <h5 class="modal-title">Album Details</h5>
                 <button type="button" class="close" onclick="AppLib.closeItemModal()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <dl>
-                    <dt>@Html.DisplayNameFor(m => m.Name)</dt>
-                    <dd>@Html.DisplayFor(m => m.Name)</dd>
+                    <dt>@Html.DisplayNameFor(m => m.ArtistName)</dt>
+                    <dd>@Html.DisplayFor(m => m.ArtistName)</dd>
 
-                    <dt>@Html.DisplayNameFor(m => m.AlbumCount)</dt>
-                    <dd>@Html.DisplayFor(m => m.AlbumCount)</dd>
+                    <dt>@Html.DisplayNameFor(m => m.Title)</dt>
+                    <dd>@Html.DisplayFor(m => m.Title)</dd>
+
+                    <dt>@Html.DisplayNameFor(m => m.ReleaseYear)</dt>
+                    <dd>@Html.DisplayFor(m => m.ReleaseYear)</dd>
+
+                    <dt>@Html.DisplayNameFor(m => m.Genres)</dt>
+                    <dd>@(Model.Genres.Any() ? string.Join(", ", Model.Genres) : "-")</dd>
+
+                    <dt>@Html.DisplayNameFor(m => m.TrackCount)</dt>
+                    <dd>@Html.DisplayFor(m => m.TrackCount)</dd>
 
                     <dt>@Html.DisplayNameFor(m => m.Created)</dt>
                     <dd>@Html.DisplayFor(m => m.Created)</dd>

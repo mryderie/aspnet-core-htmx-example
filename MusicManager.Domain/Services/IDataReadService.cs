@@ -20,9 +20,9 @@ namespace MusicManager.Domain.Services
         Task<AlbumViewDto> GetAlbumView(int id);
         Task<(IList<AlbumViewDto> pageItems, int totalCount)> GetAlbumsPage(int? artistId, string search, string sortField,
                                                                             bool descending, int pageIndex, int pageSize);
+        Task<AlbumEditDto> GetAlbumEdit(int id);
 
-        
 
-        //Task<AlbumEditDto> GetAlbumEdit(int id);
+        Task<IList<(int genreId, string genreName)>> GetGenreNames();
     }
 }

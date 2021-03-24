@@ -1,6 +1,6 @@
 ﻿@model PagingData 
 
-<form asp-page="./Index" method="get" hx-boost="true" class="form-inline justify-content-end">
+<form asp-page="./Index" method="get" hx-boost="true" hx-push-url="true" class="form-inline justify-content-end">
     <input type="text" name="searchString" value="@Model[ParamName.CurrentFilter]" class="form-control mr-2 w-50" />
     @foreach (var param in Model.Parameters)
     {

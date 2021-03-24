@@ -122,5 +122,97 @@ namespace MusicManager.Web.Pages.Albums
 
             return Page();
         }
+
+        public async Task<IActionResult> OnGetDetailsModal(int id)
+        {
+            var album = await _dataReadService.GetAlbumView(id);
+            if (album == null)
+            {
+                return NotFound();
+            }
+
+            return Partial("_DetailsModal", album);
+        }
+
+        public async Task<IActionResult> OnGetEditModal(int? id, int? artistId)
+        {
+            // Create item form
+            if (!id.HasValue)
+            {
+                var createSelectOptions = await GetSelectOptions(artistId);
+                return Partial("_EditModal", ((AlbumEditDto)null, createSelectOptions.artistList, createSelectOptions.genreList));
+            }
+
+            // Update item form
+            var album = await _dataReadService.GetAlbumEdit(id.Value);
+            if (album == null)
+            {
+                return NotFound();
+            }
+
+            var updateSelectOptions = await GetSelectOptions(album.ArtistId, album.GenreIds);
+            return Partial("_EditModal", (album, updateSelectOptions.artistList, updateSelectOptions.genreList));
+        }
+
+        public async Task<IActionResult> OnPostAsync([Bind(Prefix = "Item1")]AlbumEditDto model)
+        {
+            //temp - to test handling a server-side validation error
+            if (model.Title == "error")
+                ModelState.AddModelError("Name", "Server-side validation error...");
+
+            if (ModelState.IsValid)
+            {
+                await _dataWriteService.CreateAlbum(model);
+
+                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                return new NoContentResult();
+            }
+
+            return Partial("_EditModal", model);
+        }
+
+        public async Task<IActionResult> OnPutAsync(int id, [Bind(Prefix = "Item1")]AlbumEditDto model)
+        {
+            //temp - to test handling a server-side validation error
+            if (model.Title == "error")
+                ModelState.AddModelError("Name", "Server-side validation error...");
+
+            if (ModelState.IsValid)
+            {
+                var result = await _dataWriteService.UpdateAlbum(id, model);
+
+                if (!result)
+                    return NotFound();
+
+                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                return new NoContentResult();
+            }
+
+            return Partial("_EditModal", model);
+        }
+
+        public async Task<IActionResult> OnDeleteAsync(int id)
+        {
+            var result = await _dataWriteService.DeleteAlbum(id);
+
+            if (!result)
+                return NotFound();
+
+            Response.Headers.Add("HX-Trigger", "gridItemDelete");
+            return new NoContentResult();
+        }
+
+        protected async Task<(List<SelectListItem> artistList, List<SelectListItem> genreList)> GetSelectOptions(int? artistId = null, IList<int> genreIds = null)
+        {
+            var artistNames = await _dataReadService.GetArtistNames();
+            var artistList = artistNames.Select(a => new SelectListItem(a.artistName, a.artistId.ToString(),
+                                                                        artistId == a.artistId)).ToList();
+
+            var genreNames = await _dataReadService.GetGenreNames();
+            var genreList = genreNames.Select(a => new SelectListItem(a.genreName, a.genreId.ToString(),
+                                                                        genreIds != null ? genreIds.Any(g => g == a.genreId) : false)).ToList();
+
+            return (artistList, genreList);
+        }
     }
 }

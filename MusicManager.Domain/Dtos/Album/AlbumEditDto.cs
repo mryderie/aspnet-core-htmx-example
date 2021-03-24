@@ -1,0 +1,25 @@
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace MusicManager.Domain.Dtos.Album
+{
+    public class AlbumEditDto
+    {
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Title { get; set; }
+
+        [Required]
+        [DisplayName("Release Year")]
+        public int ReleaseYear { get; set; }
+
+        [Required]
+        [DisplayName("Artist")]
+        public int ArtistId { get; set; }
+
+        public IList<int> GenreIds { get; set; }
+    }
+}

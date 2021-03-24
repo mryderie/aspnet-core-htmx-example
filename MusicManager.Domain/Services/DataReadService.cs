@@ -118,6 +118,7 @@ namespace MusicManager.Domain.Services
                                         Title = a.Title,
                                         ReleaseYear = a.ReleaseYear,
                                         TrackCount = a.Tracks.Count,
+                                        Genres = a.AlbumGenres.Select(g => g.Genre.Name).ToList(),
                                         ArtistId = a.ArtistId,
                                         ArtistName = a.Artist.Name,
                                         Created = a.Created,
@@ -126,16 +127,19 @@ namespace MusicManager.Domain.Services
                                     .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        //public async Task<AlbumEditDto> GetAlbumEdit(int id)
-        //{
-        //    return await _dbContext.Artists
-        //                            .Select(a => new ArtistEditDto
-        //                            {
-        //                                Id = a.Id,
-        //                                Name = a.Name
-        //                            })
-        //                            .FirstOrDefaultAsync(a => a.Id == id);
-        //}
+        public async Task<AlbumEditDto> GetAlbumEdit(int id)
+        {
+            return await _dbContext.Albums
+                                    .Select(a => new AlbumEditDto
+                                    {
+                                        Id = a.Id,
+                                        Title = a.Title,
+                                        ReleaseYear = a.ReleaseYear,
+                                        ArtistId = a.ArtistId,
+                                        GenreIds = a.AlbumGenres.Select(g => g.GenreId).ToList()
+                                    })
+                                    .FirstOrDefaultAsync(a => a.Id == id);
+        }
 
         public async Task<(IList<AlbumViewDto> pageItems, int totalCount)> GetAlbumsPage(int? artistId, string search, string sortField,
                                                                                         bool descending, int pageIndex, int pageSize)
@@ -197,6 +201,7 @@ namespace MusicManager.Domain.Services
                                         Title = a.Title,
                                         ReleaseYear = a.ReleaseYear,
                                         TrackCount = a.Tracks.Count,
+                                        Genres = a.AlbumGenres.Select(g => g.Genre.Name).ToList(),
                                         ArtistId = a.ArtistId,
                                         ArtistName = a.Artist.Name,
                                         Created = a.Created,
@@ -207,6 +212,15 @@ namespace MusicManager.Domain.Services
                                     .ToListAsync();
 
             return (pageItems, totalCount);
+        }
+
+        public async Task<IList<(int genreId, string genreName)>> GetGenreNames()
+        {
+            var result = await _dbContext.Genres.OrderBy(g => g.Name)
+                                                .Select(g => new { g.Id, g.Name })
+                                                .ToListAsync();
+
+            return result.Select(a => (a.Id, a.Name)).ToList();
         }
     }
 }

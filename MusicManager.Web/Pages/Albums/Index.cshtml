@@ -7,7 +7,7 @@
 <h1 class="mb-5">
     Albums
     <a href="#"
-        hx-get="@Url.Page("./Index", "EditModal")"
+        hx-get="@Url.Page("./Index", "EditModal", new { artistId = Model.Albums.PagingData.Parameters[ParamName.ArtistId] })"
         hx-trigger="click"
         hx-target="#itemModalContainer"
         class="btn btn-outline-primary mb-2">
@@ -19,7 +19,7 @@
 
 <div class="row mb-3">
     <div class="col-12 col-md-4 text-right text-md-left">
-        <form asp-page="./Index" method="get" hx-boost="true" class="form-inline justify-content-start">
+        <form asp-page="./Index" method="get" hx-boost="true" hx-push-url="true" class="form-inline justify-content-start">
             @foreach (var param in Model.Albums.PagingData.Parameters)
             {
                 if (!string.IsNullOrWhiteSpace(param.Value)
@@ -77,6 +77,9 @@
                            route-sortOrder="@Model.ReleaseYearSort"
                            display-name="@Html.DisplayNameFor(model => model.Albums[0].ReleaseYear)" />
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Albums[0].Genres)
+            </th>
             <th hx-boost="true">
                 <sort-link page="./Index"
                            route-params="@Model.Albums.PagingData.Parameters"
@@ -89,10 +92,18 @@
                            route-sortOrder="@Model.UpdatedSort"
                            display-name="@Html.DisplayNameFor(model => model.Albums[0].Updated)" />
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
+        @if (!Model.Albums.Any())
+        {
+            <tr>
+                <td colspan="8" class="text-center">
+                    <em>There are no items to display.</em>
+                </td>
+            </tr>
+        }
         @foreach (var item in Model.Albums)
         {
             <tr>
@@ -107,6 +118,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ReleaseYear)
+                </td>
+                <td>
+                    @(item.Genres.Any() ? string.Join(", ", item.Genres) : "-")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)
