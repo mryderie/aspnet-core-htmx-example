@@ -2,6 +2,7 @@
 using MusicManager.Domain.DataAccess;
 using MusicManager.Domain.Dtos.Album;
 using MusicManager.Domain.Dtos.Artist;
+using MusicManager.Domain.Dtos.Genre;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -214,6 +215,9 @@ namespace MusicManager.Domain.Services
             return (pageItems, totalCount);
         }
 
+
+        // Genres
+
         public async Task<IList<(int genreId, string genreName)>> GetGenreNames()
         {
             var result = await _dbContext.Genres.OrderBy(g => g.Name)
@@ -221,6 +225,83 @@ namespace MusicManager.Domain.Services
                                                 .ToListAsync();
 
             return result.Select(a => (a.Id, a.Name)).ToList();
+        }
+        
+        public async Task<(IList<GenreViewDto> pageItems, int totalCount)> GetGenresPage(string search, string sortField, bool descending, int pageIndex, int pageSize)
+        {
+            var query = _dbContext.Genres.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(a => EF.Functions.Like(a.Name, $"%{search}%"));
+
+            switch (sortField?.ToLowerInvariant())
+            {
+                case "albumcount":
+                    if (descending)
+                        query = query.OrderByDescending(a => a.AlbumGenres.Count);
+                    else
+                        query = query.OrderBy(a => a.AlbumGenres.Count);
+                    break;
+                case "created":
+                    if (descending)
+                        query = query.OrderByDescending(a => a.Created);
+                    else
+                        query = query.OrderBy(a => a.Created);
+                    break;
+                case "updated":
+                    if (descending)
+                        query = query.OrderByDescending(a => a.Updated);
+                    else
+                        query = query.OrderBy(a => a.Updated);
+                    break;
+                default:
+                    if (descending)
+                        query = query.OrderByDescending(a => a.Name);
+                    else
+                        query = query.OrderBy(a => a.Name);
+                    break;
+            }
+
+            var totalCount = await query.CountAsync();
+            var pageItems = await query
+                                    .Select(a => new GenreViewDto
+                                    {
+                                        Id = a.Id,
+                                        Name = a.Name,
+                                        AlbumCount = a.AlbumGenres.Count,
+                                        Created = a.Created,
+                                        Updated = a.Updated
+                                    })
+                                    .Skip((pageIndex - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToListAsync();
+
+            return (pageItems, totalCount);
+        }
+
+        public async Task<GenreViewDto> GetGenreView(int id)
+        {
+            return await _dbContext.Genres
+                                    .Select(a => new GenreViewDto
+                                    {
+                                        Id = a.Id,
+                                        Name = a.Name,
+                                        AlbumCount = a.AlbumGenres.Count,
+                                        Created = a.Created,
+                                        Updated = a.Updated
+                                    })
+                                    .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<GenreEditDto> GetGenreEdit(int id)
+        {
+            return await _dbContext.Genres
+                                    .Select(a => new GenreEditDto
+                                    {
+                                        Id = a.Id,
+                                        Name = a.Name
+                                    })
+                                    .FirstOrDefaultAsync(a => a.Id == id);
         }
     }
 }

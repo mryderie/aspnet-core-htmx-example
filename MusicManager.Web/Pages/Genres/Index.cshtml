@@ -1,24 +1,24 @@
 ﻿@page "{id:int?}"
-@model MusicManager.Web.Pages.Artists.IndexModel
+@model MusicManager.Web.Pages.Genres.IndexModel
 @{
-    ViewData["Title"] = "Artists";
+    ViewData["Title"] = "Genres";
 }
 
 <h1 class="mb-5">
-    Artists
+    Genres
     <a href="#"
        hx-get="@Url.Page("./Index", "EditModal")"
        hx-trigger="click"
        hx-target="#itemModalContainer"
        class="btn btn-outline-primary mb-2">
-        <i class="bi-plus-circle" role="img" aria-label="Add Artist"></i>
-        Add Artist
+        <i class="bi-plus-circle" role="img" aria-label="Add Genre"></i>
+        Add Genre
     </a>
 </h1>
 
 <div class="row mb-3">
     <div class="col-md-9 offset-md-3">
-        @await Html.PartialAsync("_GridSearchForm", Model.Artists.PagingData)
+        @await Html.PartialAsync("_GridSearchForm", Model.Genres.PagingData)
     </div>
 </div>
 
@@ -28,33 +28,33 @@
             <tr>
                 <th hx-boost="true">
                     <sort-link page="./Index"
-                               route-params="@Model.Artists.PagingData.Parameters"
+                               route-params="@Model.Genres.PagingData.Parameters"
                                route-sortOrder="@Model.NameSort"
-                               display-name="@Html.DisplayNameFor(model => model.Artists[0].Name)" />
+                               display-name="@Html.DisplayNameFor(model => model.Genres[0].Name)" />
                 </th>
                 <th hx-boost="true">
                     <sort-link page="./Index"
-                               route-params="@Model.Artists.PagingData.Parameters"
+                               route-params="@Model.Genres.PagingData.Parameters"
                                route-sortOrder="@Model.AlbumCountSort"
-                               display-name="@Html.DisplayNameFor(model => model.Artists[0].AlbumCount)" />
+                               display-name="@Html.DisplayNameFor(model => model.Genres[0].AlbumCount)" />
                 </th>
                 <th hx-boost="true">
                     <sort-link page="./Index"
-                               route-params="@Model.Artists.PagingData.Parameters"
+                               route-params="@Model.Genres.PagingData.Parameters"
                                route-sortOrder="@Model.CreatedSort"
-                               display-name="@Html.DisplayNameFor(model => model.Artists[0].Created)" />
+                               display-name="@Html.DisplayNameFor(model => model.Genres[0].Created)" />
                 </th>
                 <th hx-boost="true">
                     <sort-link page="./Index"
-                               route-params="@Model.Artists.PagingData.Parameters"
+                               route-params="@Model.Genres.PagingData.Parameters"
                                route-sortOrder="@Model.UpdatedSort"
-                               display-name="@Html.DisplayNameFor(model => model.Artists[0].Updated)" />
+                               display-name="@Html.DisplayNameFor(model => model.Genres[0].Updated)" />
                 </th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @if (!Model.Artists.Any())
+            @if (!Model.Genres.Any())
             {
                 <tr>
                     <td colspan="5" class="text-center">
@@ -62,16 +62,14 @@
                     </td>
                 </tr>
             }
-            @foreach (var item in Model.Artists)
+            @foreach (var item in Model.Genres)
             {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        <a hx-boost="true" asp-page="/Albums/Index" asp-route-artistId="@item.Id">
-                            @Html.DisplayFor(modelItem => item.AlbumCount)
-                        </a>
+                        @Html.DisplayFor(modelItem => item.AlbumCount)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Created)
@@ -100,7 +98,7 @@
     </table>
 </div>
 
-@await Html.PartialAsync("_Pager", Model.Artists.PagingData)
+@await Html.PartialAsync("_Pager", Model.Genres.PagingData)
 
 <div id="itemModalContainer"></div>
 

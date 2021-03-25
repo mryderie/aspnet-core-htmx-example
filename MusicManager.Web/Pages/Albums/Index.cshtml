@@ -50,103 +50,105 @@
     </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th hx-boost="true">
-                <sort-link page="./Index"
-                           route-params="@Model.Albums.PagingData.Parameters"
-                           route-sortOrder="@Model.ArtistNameSort"
-                           display-name="@Html.DisplayNameFor(model => model.Albums[0].ArtistName)" />
-            </th>
-            <th hx-boost="true">
-                <sort-link page="./Index"
-                           route-params="@Model.Albums.PagingData.Parameters"
-                           route-sortOrder="@Model.TitleSort"
-                           display-name="@Html.DisplayNameFor(model => model.Albums[0].Title)" />
-            </th>
-            <th hx-boost="true">
-                <sort-link page="./Index"
-                           route-params="@Model.Albums.PagingData.Parameters"
-                           route-sortOrder="@Model.TrackCountSort"
-                           display-name="@Html.DisplayNameFor(model => model.Albums[0].TrackCount)" />
-            </th>
-            <th hx-boost="true">
-                <sort-link page="./Index"
-                           route-params="@Model.Albums.PagingData.Parameters"
-                           route-sortOrder="@Model.ReleaseYearSort"
-                           display-name="@Html.DisplayNameFor(model => model.Albums[0].ReleaseYear)" />
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Albums[0].Genres)
-            </th>
-            <th hx-boost="true">
-                <sort-link page="./Index"
-                           route-params="@Model.Albums.PagingData.Parameters"
-                           route-sortOrder="@Model.CreatedSort"
-                           display-name="@Html.DisplayNameFor(model => model.Albums[0].Created)" />
-            </th>
-            <th hx-boost="true">
-                <sort-link page="./Index"
-                           route-params="@Model.Albums.PagingData.Parameters"
-                           route-sortOrder="@Model.UpdatedSort"
-                           display-name="@Html.DisplayNameFor(model => model.Albums[0].Updated)" />
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Albums.Any())
-        {
+<div class="table-responsive">
+    <table class="table">
+        <thead>
             <tr>
-                <td colspan="8" class="text-center">
-                    <em>There are no items to display.</em>
-                </td>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Albums.PagingData.Parameters"
+                               route-sortOrder="@Model.ArtistNameSort"
+                               display-name="@Html.DisplayNameFor(model => model.Albums[0].ArtistName)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Albums.PagingData.Parameters"
+                               route-sortOrder="@Model.TitleSort"
+                               display-name="@Html.DisplayNameFor(model => model.Albums[0].Title)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Albums.PagingData.Parameters"
+                               route-sortOrder="@Model.TrackCountSort"
+                               display-name="@Html.DisplayNameFor(model => model.Albums[0].TrackCount)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Albums.PagingData.Parameters"
+                               route-sortOrder="@Model.ReleaseYearSort"
+                               display-name="@Html.DisplayNameFor(model => model.Albums[0].ReleaseYear)" />
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Albums[0].Genres)
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Albums.PagingData.Parameters"
+                               route-sortOrder="@Model.CreatedSort"
+                               display-name="@Html.DisplayNameFor(model => model.Albums[0].Created)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Albums.PagingData.Parameters"
+                               route-sortOrder="@Model.UpdatedSort"
+                               display-name="@Html.DisplayNameFor(model => model.Albums[0].Updated)" />
+                </th>
+                <th>Actions</th>
             </tr>
-        }
-        @foreach (var item in Model.Albums)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ArtistName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TrackCount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReleaseYear)
-                </td>
-                <td>
-                    @(item.Genres.Any() ? string.Join(", ", item.Genres) : "-")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Created)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Updated)
-                </td>
-                <td class="text-right">
-                    <a href="#"
-                       hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
-                       hx-trigger="click"
-                       hx-target="#itemModalContainer"
-                       class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
-                    <a href="#"
-                       hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
-                       hx-trigger="click"
-                       hx-target="#itemModalContainer"
-                       class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
-                    <a href="#"
-                       onclick="AppLib.confirmDelete(@item.Id, '@item.Title')"
-                       class="btn btn-outline-primary"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @if (!Model.Albums.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center">
+                        <em>There are no items to display.</em>
+                    </td>
+                </tr>
+            }
+            @foreach (var item in Model.Albums)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArtistName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TrackCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReleaseYear)
+                    </td>
+                    <td>
+                        @(item.Genres.Any() ? string.Join(", ", item.Genres) : "-")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated)
+                    </td>
+                    <td class="text-right">
+                        <a href="#"
+                           hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
+                           hx-trigger="click"
+                           hx-target="#itemModalContainer"
+                           class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
+                        <a href="#"
+                           hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
+                           hx-trigger="click"
+                           hx-target="#itemModalContainer"
+                           class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
+                        <a href="#"
+                           onclick="AppLib.confirmDelete(@item.Id, '@item.Title')"
+                           class="btn btn-outline-primary"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @await Html.PartialAsync("_Pager", Model.Albums.PagingData)
 

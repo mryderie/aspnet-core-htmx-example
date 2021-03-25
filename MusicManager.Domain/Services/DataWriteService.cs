@@ -2,6 +2,7 @@
 using MusicManager.Domain.DataAccess;
 using MusicManager.Domain.Dtos.Album;
 using MusicManager.Domain.Dtos.Artist;
+using MusicManager.Domain.Dtos.Genre;
 using MusicManager.Domain.Entities;
 using System;
 using System.Linq;
@@ -116,6 +117,47 @@ namespace MusicManager.Domain.Services
                 return false;
 
             _dbContext.Albums.Remove(album);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<int> CreateGenre(GenreEditDto dto)
+        {
+            var newGenre = new Genre()
+            {
+                Name = dto.Name,
+                Created = DateTime.UtcNow
+            };
+
+            _dbContext.Genres.Add(newGenre);
+            await _dbContext.SaveChangesAsync();
+
+            return newGenre.Id;
+        }
+
+        public async Task<bool> UpdateGenre(int id, GenreEditDto dto)
+        {
+            var genre = await _dbContext.Genres.FindAsync(id);
+
+            if (genre == null)
+                return false;
+
+            genre.Name = dto.Name;
+            genre.Updated = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteGenre(int id)
+        {
+            var genre = await _dbContext.Genres.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (genre == null)
+                return false;
+
+            _dbContext.Genres.Remove(genre);
             await _dbContext.SaveChangesAsync();
 
             return true;
