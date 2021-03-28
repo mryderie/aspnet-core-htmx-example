@@ -158,7 +158,7 @@ namespace MusicManager.Web.Pages.Albums
         {
             //temp - to test handling a server-side validation error
             if (model.Title == "error")
-                ModelState.AddModelError("Name", "Server-side validation error...");
+                ModelState.AddModelError("Item1.Title", "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -168,14 +168,15 @@ namespace MusicManager.Web.Pages.Albums
                 return new NoContentResult();
             }
 
-            return Partial("_EditModal", model);
+            var selectOptions = await GetSelectOptions(model.ArtistId, model.GenreIds);
+            return Partial("_EditModal", (model, selectOptions.artistList, selectOptions.genreList));
         }
 
         public async Task<IActionResult> OnPutAsync(int id, [Bind(Prefix = "Item1")]AlbumEditDto model)
         {
             //temp - to test handling a server-side validation error
             if (model.Title == "error")
-                ModelState.AddModelError("Name", "Server-side validation error...");
+                ModelState.AddModelError("Item1.Title", "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -188,7 +189,8 @@ namespace MusicManager.Web.Pages.Albums
                 return new NoContentResult();
             }
 
-            return Partial("_EditModal", model);
+            var selectOptions = await GetSelectOptions(model.ArtistId, model.GenreIds);
+            return Partial("_EditModal", (model, selectOptions.artistList, selectOptions.genreList));
         }
 
         public async Task<IActionResult> OnDeleteAsync(int id)
