@@ -3,6 +3,7 @@ using MusicManager.Domain.DataAccess;
 using MusicManager.Domain.Dtos.Album;
 using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Dtos.Genre;
+using MusicManager.Domain.Dtos.Track;
 using MusicManager.Domain.Entities;
 using System;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace MusicManager.Domain.Services
 
         public async Task<bool> DeleteArtist(int id)
         {
-            var artist = await _dbContext.Artists.FirstOrDefaultAsync(a => a.Id == id);
+            var artist = await _dbContext.Artists.FindAsync(id);
 
             if (artist == null)
                 return false;
@@ -111,7 +112,7 @@ namespace MusicManager.Domain.Services
 
         public async Task<bool> DeleteAlbum(int id)
         {
-            var album = await _dbContext.Albums.FirstOrDefaultAsync(a => a.Id == id);
+            var album = await _dbContext.Albums.FindAsync(id);
 
             if (album == null)
                 return false;
@@ -152,12 +153,58 @@ namespace MusicManager.Domain.Services
 
         public async Task<bool> DeleteGenre(int id)
         {
-            var genre = await _dbContext.Genres.FirstOrDefaultAsync(a => a.Id == id);
+            var genre = await _dbContext.Genres.FindAsync(id);
 
             if (genre == null)
                 return false;
 
             _dbContext.Genres.Remove(genre);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<int> CreateTrack(TrackEditDto dto)
+        {
+            var now = DateTime.UtcNow;
+            var newTrack = new Track()
+            {
+                Title = dto.Title,
+                TrackNumber = dto.TrackNumber,
+                AlbumId = dto.AlbumId,
+                Created = now
+            };
+
+            _dbContext.Tracks.Add(newTrack);
+            await _dbContext.SaveChangesAsync();
+
+            return newTrack.Id;
+        }
+
+        public async Task<bool> UpdateTrack(int id, TrackEditDto dto)
+        {
+            var track = await _dbContext.Tracks.FindAsync(id);
+
+            if (track == null)
+                return false;
+
+            track.Title = dto.Title;
+            track.TrackNumber = dto.TrackNumber;
+            track.AlbumId = dto.AlbumId;
+            track.Updated = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteTrack(int id)
+        {
+            var track = await _dbContext.Tracks.FindAsync(id);
+
+            if (track == null)
+                return false;
+
+            _dbContext.Tracks.Remove(track);
             await _dbContext.SaveChangesAsync();
 
             return true;

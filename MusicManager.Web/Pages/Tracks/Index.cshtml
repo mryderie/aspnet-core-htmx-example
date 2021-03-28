@@ -1,8 +1,153 @@
-﻿@page
+﻿@page "{id:int?}"
 @model MusicManager.Web.Pages.Tracks.IndexModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tracks";
 }
 
-<h1>Index</h1>
+<h1 class="mb-5">
+    Tracks
+    <a href="#"
+       hx-get="@Url.Page("./Index", "EditModal", new { albumId = Model.Tracks.PagingData.Parameters[ParamName.AlbumId] })"
+       hx-trigger="click"
+       hx-target="#itemModalContainer"
+       class="btn btn-outline-primary mb-2">
+        <i class="bi-plus-circle" role="img" aria-label="Add Track"></i>
+        Add Track
+    </a>
+</h1>
 
+
+<div class="row mb-3">
+    <div class="col-12 col-md-4 text-right text-md-left">
+        <form asp-page="./Index" method="get" hx-boost="true" hx-push-url="true" class="form-inline justify-content-start">
+            @foreach (var param in Model.Tracks.PagingData.Parameters)
+            {
+                if (!string.IsNullOrWhiteSpace(param.Value)
+                    && param.Key != ParamName.PageIndex // go to page 1 of search results
+                    && param.Key != ParamName.AlbumId)
+                {
+                    <input type="hidden" name="@param.Key" value="@param.Value" />
+                }
+            }
+            <select name="albumId" asp-items="Model.AlbumList" class="custom-select mb-1 mb-md-0 mr-2">
+                <option selected>- All Albums -</option>
+            </select>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi-funnel" role="img" aria-label="Go"></i>
+                Go
+            </button>
+            @if (!string.IsNullOrWhiteSpace(Model.Tracks.PagingData.Parameters[ParamName.AlbumId]))
+            {
+                <a hx-boost="true" asp-page="./Index" asp-all-route-data="Model.Tracks.PagingData.ParametersExcept(ParamName.AlbumId, ParamName.PageIndex)" class="btn btn-secondary ml-2">
+                    <i class="bi-backspace" role="img" aria-label="Clear"></i>
+                    Clear
+                </a>
+            }
+        </form>
+    </div>
+    <div class="col-12 col-md-8">
+        @await Html.PartialAsync("_GridSearchForm", Model.Tracks.PagingData)
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Tracks.PagingData.Parameters"
+                               route-sortOrder="@Model.ArtistNameSort"
+                               display-name="@Html.DisplayNameFor(model => model.Tracks[0].ArtistName)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Tracks.PagingData.Parameters"
+                               route-sortOrder="@Model.AlbumNameSort"
+                               display-name="@Html.DisplayNameFor(model => model.Tracks[0].AlbumTitle)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Tracks.PagingData.Parameters"
+                               route-sortOrder="@Model.TitleSort"
+                               display-name="@Html.DisplayNameFor(model => model.Tracks[0].Title)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Tracks.PagingData.Parameters"
+                               route-sortOrder="@Model.TrackNumberSort"
+                               display-name="@Html.DisplayNameFor(model => model.Tracks[0].TrackNumber)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Tracks.PagingData.Parameters"
+                               route-sortOrder="@Model.CreatedSort"
+                               display-name="@Html.DisplayNameFor(model => model.Tracks[0].Created)" />
+                </th>
+                <th hx-boost="true">
+                    <sort-link page="./Index"
+                               route-params="@Model.Tracks.PagingData.Parameters"
+                               route-sortOrder="@Model.UpdatedSort"
+                               display-name="@Html.DisplayNameFor(model => model.Tracks[0].Updated)" />
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Tracks.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center">
+                        <em>There are no items to display.</em>
+                    </td>
+                </tr>
+            }
+            @foreach (var item in Model.Tracks)
+            {
+                <tr>
+                    <td>
+                        <a hx-boost="true" asp-page="/Albums/Index" asp-route-artistId="@item.ArtistId">
+                            @Html.DisplayFor(modelItem => item.ArtistName)
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AlbumTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TrackNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated)
+                    </td>
+                    <td class="text-right">
+                        <a href="#"
+                           hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
+                           hx-trigger="click"
+                           hx-target="#itemModalContainer"
+                           class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
+                        <a href="#"
+                           hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
+                           hx-trigger="click"
+                           hx-target="#itemModalContainer"
+                           class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
+                        <a href="#"
+                           onclick="AppLib.confirmDelete(@item.Id, '@item.Title')"
+                           class="btn btn-outline-primary"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@await Html.PartialAsync("_Pager", Model.Tracks.PagingData)
+
+<div id="itemModalContainer"></div>
+
+@await Html.PartialAsync("_ConfirmDeleteModal")

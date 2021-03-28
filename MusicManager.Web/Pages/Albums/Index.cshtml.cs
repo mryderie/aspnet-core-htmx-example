@@ -14,7 +14,7 @@ namespace MusicManager.Web.Pages.Albums
 {
     public class IndexModel : PageModel
     {
-        private const int PAGE_SIZE = 3;
+        private const int PAGE_SIZE = 10;
         private readonly IDataReadService _dataReadService;
         private readonly IDataWriteService _dataWriteService;
 

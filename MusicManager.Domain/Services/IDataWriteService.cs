@@ -1,6 +1,7 @@
 ﻿using MusicManager.Domain.Dtos.Album;
 using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Dtos.Genre;
+using MusicManager.Domain.Dtos.Track;
 using System.Threading.Tasks;
 
 namespace MusicManager.Domain.Services
@@ -18,5 +19,9 @@ namespace MusicManager.Domain.Services
         Task<int> CreateGenre(GenreEditDto dto);
         Task<bool> UpdateGenre(int id, GenreEditDto dto);
         Task<bool> DeleteGenre(int id);
+        
+        Task<int> CreateTrack(TrackEditDto dto);
+        Task<bool> UpdateTrack(int id, TrackEditDto dto);
+        Task<bool> DeleteTrack(int id);
     }
 }

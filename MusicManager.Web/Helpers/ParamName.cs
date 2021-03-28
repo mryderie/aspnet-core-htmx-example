@@ -6,5 +6,6 @@
         public static string SortOrder = "sortOrder";
         public static string CurrentFilter = "currentFilter";
         public static string ArtistId = "artistId";
+        public static string AlbumId = "albumId";
     }
 }
