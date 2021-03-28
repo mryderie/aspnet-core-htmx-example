@@ -373,6 +373,7 @@ namespace MusicManager.Domain.DataAccess
                 new Artist
                 {
                     Name = "Chewy Kid Edie",
+                    Created = now,
                     Albums = new []
                     {
                         new Album
@@ -426,6 +427,7 @@ namespace MusicManager.Domain.DataAccess
                 new Artist
                 {
                     Name = "Super Smelly Butterflies",
+                    Created = now,
                     Albums = new []
                     {
                         new Album

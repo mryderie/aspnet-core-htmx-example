@@ -111,7 +111,9 @@
                         </a>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AlbumTitle)
+                        <a hx-boost="true" asp-page="/Tracks/Index" asp-route-albumId="@item.AlbumId">
+                            @Html.DisplayFor(modelItem => item.AlbumTitle)
+                        </a>                        
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)

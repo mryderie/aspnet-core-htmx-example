@@ -109,13 +109,17 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ArtistName)
+                        <a hx-boost="true" asp-page="/Albums/Index" asp-route-artistId="@item.ArtistId">
+                            @Html.DisplayFor(modelItem => item.ArtistName)
+                        </a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TrackCount)
+                        <a hx-boost="true" asp-page="/Tracks/Index" asp-route-albumId="@item.Id">
+                            @Html.DisplayFor(modelItem => item.TrackCount)
+                        </a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ReleaseYear)
