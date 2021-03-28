@@ -11,6 +11,8 @@ namespace MusicManager.Domain.Services
 {
     public interface IDataReadService
     {
+        Task<(int genreCount, int artistCount, int albumCount, int trackCount)> GetEntityCounts();
+
         Task<ArtistViewDto> GetArtistView(int id);
         Task<(IList<ArtistViewDto> pageItems, int totalCount)> GetArtistsPage(string search, string sortField, bool descending, int pageIndex, int pageSize);
 

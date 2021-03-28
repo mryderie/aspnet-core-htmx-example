@@ -4,5 +4,33 @@
     ViewData["Title"] = "Home";
 }
 
-<h1>Home Page...</h1>
+<h1 class="mb-5">Welcome to Music Manager</h1>
 
+
+<h4>
+    <a hx-boost="true" asp-page="/Genres/Index">
+        Genres
+        <span class="badge badge-pill badge-primary">@Model.GenreCount</span>
+    </a>
+</h4>
+
+<h4>
+    <a hx-boost="true" asp-page="/Artists/Index">
+        Artists
+        <span class="badge badge-pill badge-primary">@Model.ArtistCount</span>
+    </a>
+</h4>
+
+<h4>
+    <a hx-boost="true" asp-page="/Albums/Index">
+        Albums
+        <span class="badge badge-pill badge-primary">@Model.AlbumCount</span>
+    </a>
+</h4>
+
+<h4>
+    <a hx-boost="true" asp-page="/Tracks/Index">
+        Tracks
+        <span class="badge badge-pill badge-primary">@Model.TrackCount</span>
+    </a>
+</h4>

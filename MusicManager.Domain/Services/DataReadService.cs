@@ -19,6 +19,16 @@ namespace MusicManager.Domain.Services
             _dbContext = dbContext;
         }
 
+        public async Task<(int genreCount, int artistCount, int albumCount, int trackCount)> GetEntityCounts()
+        {
+            var genreCount = await _dbContext.Genres.CountAsync();
+            var artistCount = await _dbContext.Artists.CountAsync();
+            var albumCount = await _dbContext.Albums.CountAsync();
+            var trackCount = await _dbContext.Tracks.CountAsync();
+
+            return (genreCount, artistCount, albumCount, trackCount);
+        }
+
         // Artists
         public async Task<ArtistViewDto> GetArtistView(int id)
         {
