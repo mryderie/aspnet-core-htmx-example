@@ -56,7 +56,7 @@ function errorRefresh(details: any) {
     //todo - log details
 
     alert("Sorry, an error occurred. The page will now refresh. Please try again.");
-    location.reload(true);
+    location.reload();
 }
 
 document.body.addEventListener("htmx:responseError", function (e: any) {
@@ -81,11 +81,16 @@ document.body.addEventListener("htmx:afterSettle", function (e: any) {
 });
 
 document.body.addEventListener('htmx:configRequest', function (e: any) {
-    // Append the id of the item to the URL so that it's consistent with other URL formats, and more REST-ful :)
-    // Easier than trying to dynamically update the form submit URL after HTMX has initialised it.
+    // NOTE: this event can fire multiple times for a single request
+    // Add the id of the item to the URL as a param - easier than trying to dynamically update the form submit URL after HTMX has initialised it.
     if (e.detail.verb === "delete") {
         if (e.detail.parameters.deleteItemId) {
-            e.detail.path = e.detail.path + "/" + e.detail.parameters.deleteItemId;
+            let deleteUrl = new URL(e.detail.path, location.origin);
+            if (!deleteUrl.searchParams.get('id')) {
+                deleteUrl.searchParams.set('id', e.detail.parameters.deleteItemId);
+            }
+
+            e.detail.path = deleteUrl.pathname + deleteUrl.search;
         }
     }
 });
