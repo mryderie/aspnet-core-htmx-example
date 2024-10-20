@@ -10,6 +10,8 @@
        hx-get="@Url.Page("./Index", "EditModal", new { albumId = Model.Tracks.PagingData.Parameters[ParamName.AlbumId] })"
        hx-trigger="click"
        hx-target="#itemModalContainer"
+       data-bs-toggle="modal"
+       data-bs-target="#itemModalContainer"
        class="btn btn-outline-primary mb-2">
         <i class="bi-plus-circle" role="img" aria-label="Add Track"></i>
         Add Track
@@ -18,8 +20,8 @@
 
 
 <div class="row mb-3">
-    <div class="col-12 col-md-4 text-right text-md-left">
-        <form asp-page="./Index" method="get" hx-boost="true" hx-push-url="true" class="form-inline justify-content-start">
+    <div class="col-12 col-md-4 text-end text-md-start">
+        <form asp-page="./Index" method="get" hx-boost="true" hx-push-url="true" class="d-inline-flex justify-content-start">
             @foreach (var param in Model.Tracks.PagingData.Parameters)
             {
                 if (!string.IsNullOrWhiteSpace(param.Value)
@@ -29,29 +31,29 @@
                     <input type="hidden" name="@param.Key" value="@param.Value" />
                 }
             }
-            <select name="albumId" asp-items="Model.AlbumList" class="custom-select mb-1 mb-md-0 mr-2">
+            <select name="albumId" asp-items="Model.AlbumList" class="form-select mb-1 mb-md-0 me-2">
                 <option selected>- All Albums -</option>
             </select>
-            <button type="submit" class="btn btn-primary">
-                <i class="bi-funnel" role="img" aria-label="Go"></i>
+            <button type="submit" class="btn btn-primary d-inline-flex">
+                <i class="bi-funnel me-1" role="img" aria-label="Go"></i>
                 Go
             </button>
             @if (!string.IsNullOrWhiteSpace(Model.Tracks.PagingData.Parameters[ParamName.AlbumId]))
             {
-                <a hx-boost="true" asp-page="./Index" asp-all-route-data="Model.Tracks.PagingData.ParametersExcept(ParamName.AlbumId, ParamName.PageIndex)" class="btn btn-secondary ml-2">
-                    <i class="bi-backspace" role="img" aria-label="Clear"></i>
+                <a hx-boost="true" asp-page="./Index" asp-all-route-data="Model.Tracks.PagingData.ParametersExcept(ParamName.AlbumId, ParamName.PageIndex)" class="btn btn-secondary ms-1 d-inline-flex">
+                    <i class="bi-backspace me-1" role="img" aria-label="Clear"></i>
                     Clear
                 </a>
             }
         </form>
     </div>
-    <div class="col-12 col-md-8">
+    <div class="col-12 col-md-8 text-end">
         @await Html.PartialAsync("_GridSearchForm", Model.Tracks.PagingData)
     </div>
 </div>
 
 <div class="table-responsive">
-    <table class="table">
+    <table class="table table-light table-striped table-hover">
         <thead>
             <tr>
                 <th hx-boost="true">
@@ -90,7 +92,7 @@
                                route-sortOrder="@Model.UpdatedSort"
                                display-name="@Html.DisplayNameFor(model => model.Tracks[0].Updated)" />
                 </th>
-                <th>Actions</th>
+                <th class="text-end">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -127,19 +129,25 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Updated)
                     </td>
-                    <td class="text-right">
+                    <td class="text-end">
                         <a href="#"
                            hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
                            hx-trigger="click"
                            hx-target="#itemModalContainer"
+                           data-bs-toggle="modal"
+                           data-bs-target="#itemModalContainer"
                            class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
                         <a href="#"
                            hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
                            hx-trigger="click"
                            hx-target="#itemModalContainer"
+                           data-bs-toggle="modal"
+                           data-bs-target="#itemModalContainer"
                            class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
                         <a href="#"
                            onclick="AppLib.confirmDelete(@item.Id, '@item.Title')"
+                           data-bs-toggle="modal"
+                           data-bs-target="#itemModalContainer"
                            class="btn btn-outline-primary"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
                     </td>
                 </tr>
@@ -150,6 +158,6 @@
 
 @await Html.PartialAsync("_Pager", Model.Tracks.PagingData)
 
-<div id="itemModalContainer"></div>
+@await Html.PartialAsync("_ItemModalContainer")
 
 @await Html.PartialAsync("_ConfirmDeleteModal")

@@ -1,54 +1,32 @@
 ﻿import "../styles/stylesmain.ts";
 
-import * as $ from "jquery";
-import "jquery-validation";
-import "jquery-validation-unobtrusive";
-import "bootstrap/js/src/modal.js";
-import "bootstrap/js/src/collapse.js";
-import * as htmx from "htmx.org/dist/htmx.js";
-import * as nprogress from "nprogress/nprogress.js";
+// need this line to ensure that htmx is included in the bundle even when it's not directly used
+import "htmx.org"
+import * as htmx from "htmx.org"
+import * as nprogress from "nprogress";
+import { Modal } from "bootstrap";
+import { Collapse } from "bootstrap";
+import { ValidationService } from "aspnet-client-validation";
+
+const v = new ValidationService();
+v.ValidationInputCssClassName = 'is-invalid';                 // change from default of 'input-validation-error'
+v.ValidationInputValidCssClassName = 'is-valid';                   // change from default of 'input-validation-valid'
+v.ValidationMessageCssClassName = 'invalid-feedback';           // change from default of 'field-validation-error'
+v.ValidationMessageValidCssClassName = 'valid-feedback';             // change from default of 'field-validation-valid'
+v.bootstrap({ watch: true });
 
 
-// this will be called when new content is loaded in the browser
-htmx.onLoad(function (target: HTMLElement) {
 
-    const forms = target.getElementsByTagName("form");
-    for (let i = 0; i < forms.length; i++) {
-        // add validation
-        $.validator.unobtrusive.parse(forms[i]);
-    }
-});
+export function closeModal(modalId: string, callback?: Function) {
 
-export function closeItemModal(callback?: Function) {
-
-    const container = document.getElementById("itemModalContainer");
-    const modal = document.getElementById("itemModal");
-    const backdrop = document.getElementById("itemModalBackdrop");
-
-    if (modal)
-        modal.classList.remove("show");
-    if (backdrop)
-        backdrop.classList.remove("show");
-
-    setTimeout(function () {
-
-        if (backdrop)
-            container.removeChild(backdrop);
-        if (modal)
-            container.removeChild(modal);
-
-        if (callback)
-            callback();
-    }, 200);
-}
-
-function closeConfirmDeleteModal(callback?: Function) {
-    $("#confirmDeleteModal").modal("hide");
+    const modelEl = document.getElementById(modalId);
+    const modal = Modal.getInstance(modelEl);
+    modal.hide();
 
     if (callback) {
-        setTimeout(function () {
+        modelEl.addEventListener('hidden.bs.modal', event => {
             callback();
-        }, 200);
+        });
     }
 }
 
@@ -85,7 +63,7 @@ document.body.addEventListener('htmx:configRequest', function (e: any) {
     // Add the id of the item to the URL as a param - easier than trying to dynamically update the form submit URL after HTMX has initialised it.
     if (e.detail.verb === "delete") {
         if (e.detail.parameters.deleteItemId) {
-            let deleteUrl = new URL(e.detail.path, location.origin);
+            const deleteUrl = new URL(e.detail.path, location.origin);
             if (!deleteUrl.searchParams.get('id')) {
                 deleteUrl.searchParams.set('id', e.detail.parameters.deleteItemId);
             }
@@ -96,50 +74,47 @@ document.body.addEventListener('htmx:configRequest', function (e: any) {
 });
 
 document.body.addEventListener("gridItemEdit", function () {
-    closeItemModal(() => htmx.ajax("GET", document.location.href));
+    closeModal("itemModalContainer", () => htmx.ajax("GET", document.location.href));
 });
 
 document.body.addEventListener("gridItemDelete", function () {
-    closeConfirmDeleteModal(() => htmx.ajax("GET", document.location.href));
+    closeModal("confirmDeleteModalContainer", () => htmx.ajax("GET", document.location.href));
 });
 
 export function isFormValid(submitter: HTMLElement) {
-
-    const form = $(submitter).closest("form");
+    const form = submitter.closest("form");
 
     // prevent double submission
-    if ($(form).data("submitted")) {
+    if ("submitted" in form.dataset) {
         return false;
     }
     else {
         // first submission - check if valid
-        const isValid = form.valid();
+        const isValid = v.isValid(form);
 
-        if (isValid)
-            $(form).data("submitted", true);
+        if (isValid) {
+            // mark the form as submitted
+            form.dataset.submitted = "submitted";
+        }
 
         return isValid;
     }
 }
 
 export function preventMultiSubmit(form: HTMLFormElement) {
-    if ($(form).data("submitted")) {
+    if ("submitted" in form.dataset) {
         // already submitted
         return false;
     }
     else {
         // first submission
-        $(form).data("submitted", true);
+        form.dataset.submitted = "submitted";
         return true;
     }
 }
 
-export function confirmDelete(id: number, itemName: string) {
-
+export function confirmDelete(id: string, itemName: string) {
     // set the values in the Deletion modal
-    $("#deleteItemName").text(itemName);
-    $("#deleteItemId").attr("value", id);
-
-    // show the deletion modal
-    $("#confirmDeleteModal").modal();
+    document.getElementById("deleteItemName").textContent = itemName;
+    document.getElementById("deleteItemId").setAttribute("value", id);
 }

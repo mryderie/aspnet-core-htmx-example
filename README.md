@@ -2,21 +2,21 @@
 
 This project demonstrates the use of [htmx](https://htmx.org/) with [ASP.NET Core Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/) to create a simple [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) web application.
 
-![Music Manager UI Screenshot](https://i.imgur.com/G7pkuTt.png)
+![Music Manager UI Screenshot](https://i.imgur.com/x8gpJ11.png)
 
 ## Frameworks used in this project:
 
 ### Front-end
 * ASP.NET Core Razor Pages
 * htmx
-* Bootstrap 4
+* Bootstrap 5
 * Bootstrap Icons
-* jQuery & jQuery Validation
+* [aspnet-client-validation](https://github.com/haacked/aspnet-client-validation)
 * TypeScript
 * Webpack
 
 ### Back-end
-* ASP.NET Core
+* ASP.NET Core 8
 * Entity Framework Core
 
 

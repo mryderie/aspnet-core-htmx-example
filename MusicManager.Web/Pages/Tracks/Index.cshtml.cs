@@ -163,7 +163,7 @@ namespace MusicManager.Web.Pages.Tracks
             {
                 await _dataWriteService.CreateTrack(model);
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -184,7 +184,7 @@ namespace MusicManager.Web.Pages.Tracks
                 if (!result)
                     return NotFound();
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -199,7 +199,7 @@ namespace MusicManager.Web.Pages.Tracks
             if (!result)
                 return NotFound();
 
-            Response.Headers.Add("HX-Trigger", "gridItemDelete");
+            Response.Headers["HX-Trigger"] = "gridItemDelete";
             return new NoContentResult();
         }
 

@@ -10,6 +10,8 @@
        hx-get="@Url.Page("./Index", "EditModal")"
        hx-trigger="click"
        hx-target="#itemModalContainer"
+       data-bs-toggle="modal"
+       data-bs-target="#itemModalContainer"
        class="btn btn-outline-primary mb-2">
         <i class="bi-plus-circle" role="img" aria-label="Add Genre"></i>
         Add Genre
@@ -17,13 +19,13 @@
 </h1>
 
 <div class="row mb-3">
-    <div class="col-md-9 offset-md-3">
+    <div class="col-md-9 offset-md-3 text-end">
         @await Html.PartialAsync("_GridSearchForm", Model.Genres.PagingData)
     </div>
 </div>
 
 <div class="table-responsive">
-    <table class="table">
+    <table class="table table-light table-striped table-hover">
         <thead>
             <tr>
                 <th hx-boost="true">
@@ -50,7 +52,7 @@
                                route-sortOrder="@Model.UpdatedSort"
                                display-name="@Html.DisplayNameFor(model => model.Genres[0].Updated)" />
                 </th>
-                <th>Actions</th>
+                <th class="text-end">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -77,19 +79,25 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Updated)
                     </td>
-                    <td class="text-right">
+                    <td class="text-end">
                         <a href="#"
                            hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
                            hx-trigger="click"
                            hx-target="#itemModalContainer"
+                           data-bs-toggle="modal"
+                           data-bs-target="#itemModalContainer"
                            class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
                         <a href="#"
                            hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
                            hx-trigger="click"
                            hx-target="#itemModalContainer"
+                           data-bs-toggle="modal"
+                           data-bs-target="#itemModalContainer"
                            class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
                         <a href="#"
                            onclick="AppLib.confirmDelete(@item.Id, '@item.Name')"
+                           data-bs-toggle="modal"
+                           data-bs-target="#confirmDeleteModalContainer"
                            class="btn btn-outline-primary"><i class="bi-trash" role="img" aria-label="Delete"></i></a>
                     </td>
                 </tr>
@@ -100,6 +108,6 @@
 
 @await Html.PartialAsync("_Pager", Model.Genres.PagingData)
 
-<div id="itemModalContainer"></div>
+@await Html.PartialAsync("_ItemModalContainer")
 
 @await Html.PartialAsync("_ConfirmDeleteModal")

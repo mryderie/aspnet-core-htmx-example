@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -131,7 +129,7 @@ namespace MusicManager.Web.Pages.Genres
             {
                 await _dataWriteService.CreateGenre(model);
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -151,7 +149,7 @@ namespace MusicManager.Web.Pages.Genres
                 if (!result)
                     return NotFound();
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -165,7 +163,7 @@ namespace MusicManager.Web.Pages.Genres
             if (!result)
                 return NotFound();
 
-            Response.Headers.Add("HX-Trigger", "gridItemDelete");
+            Response.Headers["HX-Trigger"] = "gridItemDelete";
             return new NoContentResult();
         }
     }

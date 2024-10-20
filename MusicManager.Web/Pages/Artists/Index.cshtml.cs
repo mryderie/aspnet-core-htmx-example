@@ -131,7 +131,7 @@ namespace MusicManager.Web.Pages.Artists
             {
                 await _dataWriteService.CreateArtist(model);
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -151,7 +151,7 @@ namespace MusicManager.Web.Pages.Artists
                 if (!result)
                     return NotFound();
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -165,7 +165,7 @@ namespace MusicManager.Web.Pages.Artists
             if(!result)
                 return NotFound();
 
-            Response.Headers.Add("HX-Trigger", "gridItemDelete");
+            Response.Headers["HX-Trigger"] = "gridItemDelete";
             return new NoContentResult();
         }
     }

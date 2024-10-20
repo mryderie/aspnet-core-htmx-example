@@ -1,20 +1,22 @@
-﻿<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+﻿<div id="confirmDeleteModalContainer"
+     class="modal modal-blur fade"
+     style="display: none"
+     aria-hidden="false"
+     tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirm Deletion</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 Are you sure you want to delete <strong id="deleteItemName"></strong>?
             </div>
             <div class="modal-footer">
                 <!form hx-delete="@Url.Page("./Index")"
-                       onsubmit="AppLib.preventMultiSubmit()">
+                       onsubmit="AppLib.preventMultiSubmit(this)">
                     <input id="deleteItemId" name="deleteItemId" type="hidden" value="">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">Delete</button>
                     @Html.AntiForgeryToken()
                 </!form>

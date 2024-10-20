@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MusicManager.Domain.Dtos.Album;
-using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
 
@@ -164,7 +162,7 @@ namespace MusicManager.Web.Pages.Albums
             {
                 await _dataWriteService.CreateAlbum(model);
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -185,7 +183,7 @@ namespace MusicManager.Web.Pages.Albums
                 if (!result)
                     return NotFound();
 
-                Response.Headers.Add("HX-Trigger", "gridItemEdit");
+                Response.Headers["HX-Trigger"] = "gridItemEdit";
                 return new NoContentResult();
             }
 
@@ -200,7 +198,7 @@ namespace MusicManager.Web.Pages.Albums
             if (!result)
                 return NotFound();
 
-            Response.Headers.Add("HX-Trigger", "gridItemDelete");
+            Response.Headers["HX-Trigger"] = "gridItemDelete";
             return new NoContentResult();
         }
 

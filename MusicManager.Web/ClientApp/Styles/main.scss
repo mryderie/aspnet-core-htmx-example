@@ -1,1 +1,15 @@
-﻿
+﻿@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// Use the Bootstrap styles for the corresponding ASP.NET/jQuery Validation classes
+.input-validation-error {
+    @extend .is-invalid;
+}
+.input-validation-valid {
+    @extend .is-valid;
+}
+.field-validation-error {
+    @extend .invalid-feedback;
+}
+.field-validation-valid {
+    @extend .valid-feedback;
+}

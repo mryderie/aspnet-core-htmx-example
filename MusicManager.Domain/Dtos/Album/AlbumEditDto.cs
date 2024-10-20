@@ -21,6 +21,6 @@ namespace MusicManager.Domain.Dtos.Album
         public int ArtistId { get; set; }
 
         [DisplayName("Genres")]
-        public IList<int> GenreIds { get; set; }
+        public IList<int> GenreIds { get; set; } = new List<int>();
     }
 }

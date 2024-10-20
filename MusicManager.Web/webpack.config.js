@@ -47,21 +47,15 @@ module.exports = (env, argv) => {
                     // Scripts
                     test: /\.tsx?$/,
                     loader: 'ts-loader',
-                    exclude: /node_modules/,
-
+                    exclude: /node_modules/
                 },
                 {
                     // Fonts
-                    test: /\.(woff|woff2|eot|ttf)$/,
-                    use: [
-                        {
-                            loader: 'url-loader',
-                            options: {
-                                limit: 0, // Do not add to stylesheet as Base64
-                                name: '/fonts/[name]-[hash].[ext]'
-                            },
-                        },
-                    ],
+                    test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                    type: "asset/resource",
+                    generator: {
+                        filename: "fonts/[name]-[hash].[ext]",
+                    }
                 }
             ]
         },

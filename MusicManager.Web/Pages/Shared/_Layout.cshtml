@@ -7,13 +7,20 @@
 
     <link rel="stylesheet" href="~/styles/vendor.bundle.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/styles/main.bundle.css" asp-append-version="true" />
+    
+    @* Scripts must be in head, or else there are problems with Bootstrap modals when using hx-boost *@
+    <script defer src="~/scripts/vendor.bundle.js" asp-append-version="true"></script>
+    <script defer src="~/scripts/main.bundle.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid px-0">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3">
+            <div class="container-fluid">
                 <a hx-boost="true" class="navbar-brand" asp-page="/Index">Music Manager</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -47,10 +54,5 @@
             Music Manager - <a hx-boost="true" asp-page="/Index">Home</a>
         </div>
     </footer>
-
-    <script defer src="~/scripts/vendor.bundle.js" asp-append-version="true"></script>
-    <script defer src="~/scripts/main.bundle.js" asp-append-version="true"></script>
-
-    @RenderSection("Scripts", required: false)
 </body>
 </html>

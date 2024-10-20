@@ -1,7 +1,7 @@
 ﻿@model PagingData 
 
-<form asp-page="./Index" method="get" hx-boost="true" hx-push-url="true" class="form-inline justify-content-end">
-    <input type="text" name="searchString" value="@Model[ParamName.CurrentFilter]" class="form-control mr-2 w-50" />
+<form asp-page="./Index" method="get" hx-boost="true" hx-push-url="true" class="d-inline-flex">
+    <input type="search" placeholder="Search" aria-label="Search" name="searchString" value="@Model[ParamName.CurrentFilter]" class="form-control me-1" />
     @foreach (var param in Model.Parameters)
     {
         if (!string.IsNullOrWhiteSpace(param.Value)
@@ -10,14 +10,15 @@
             <input type="hidden" name="@param.Key" value="@param.Value" />
         }
     }
-    <button type="submit" class="btn btn-primary">
-        <i class="bi-search" role="img" aria-label="Search"></i>
+
+    <button type="submit" class="btn btn-primary d-inline-flex">
+        <i class="bi-search me-1" role="img" aria-label="Search"></i>
         Search
     </button>
     @if (!string.IsNullOrWhiteSpace(Model[ParamName.CurrentFilter]))
     {
-        <a hx-boost="true" asp-page="./Index" asp-all-route-data="Model.ParametersExcept(ParamName.CurrentFilter, ParamName.PageIndex)" class="btn btn-secondary ml-2">
-            <i class="bi-backspace" role="img" aria-label="Clear"></i>
+        <a hx-boost="true" asp-page="./Index" asp-all-route-data="Model.ParametersExcept(ParamName.CurrentFilter, ParamName.PageIndex)" class="btn btn-secondary ms-1 d-inline-flex">
+            <i class="bi-backspace me-1" role="img" aria-label="Clear"></i>
             Clear
         </a>
     }
