@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/MusicManager.Web/bin/Debug/netcoreapp3.1/MusicManager.Web.dll",
+            "program": "${workspaceFolder}/MusicManager.Web/bin/Debug/net8.0/MusicManager.Web.dll",
             "args": [],
             "cwd": "${workspaceFolder}/MusicManager.Web",
             "stopAtEntry": false,
