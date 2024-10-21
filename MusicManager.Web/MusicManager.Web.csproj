@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <None Remove="ClientApp\Scripts\main.ts" />
-    <None Remove="ClientApp\Styles\stylesMain.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +35,6 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\Scripts\main.ts" />
-    <TypeScriptCompile Include="ClientApp\Styles\stylesMain.ts" />
   </ItemGroup>
 
   <!-- NPM scripts to run webpack during VS build -->

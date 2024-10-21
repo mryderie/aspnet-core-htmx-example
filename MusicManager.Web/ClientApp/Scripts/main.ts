@@ -1,4 +1,5 @@
-﻿import "../styles/stylesmain.ts";
+﻿import "../styles/stylesVendor.ts";
+import "../styles/main.scss";
 
 // need this line to ensure that htmx is included in the bundle even when it's not directly used
 import "htmx.org"
