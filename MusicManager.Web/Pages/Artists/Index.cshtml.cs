@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -158,9 +156,9 @@ namespace MusicManager.Web.Pages.Artists
             return Partial("_EditModal", model);
         }
 
-        public async Task<IActionResult> OnDeleteAsync(int id)
+        public async Task<IActionResult> OnDeleteAsync(int deleteItemId)
         {
-            var result = await _dataWriteService.DeleteArtist(id);
+            var result = await _dataWriteService.DeleteArtist(deleteItemId);
 
             if(!result)
                 return NotFound();

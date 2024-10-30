@@ -192,9 +192,9 @@ namespace MusicManager.Web.Pages.Tracks
             return Partial("_EditModal", (model, updateSelectOptions));
         }
 
-        public async Task<IActionResult> OnDeleteAsync(int id)
+        public async Task<IActionResult> OnDeleteAsync(int deleteItemId)
         {
-            var result = await _dataWriteService.DeleteTrack(id);
+            var result = await _dataWriteService.DeleteTrack(deleteItemId);
 
             if (!result)
                 return NotFound();

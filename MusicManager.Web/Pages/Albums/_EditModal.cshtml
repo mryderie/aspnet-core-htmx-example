@@ -12,43 +12,46 @@
     <div class="modal-content">
         <!form @(hxMethod)="@(submissionUrl)"
                 hx-trigger="submit[AppLib.isFormValid(submitter)]"
+                hx-disabled-elt="find fieldset"
                 hx-target="#itemModalContainer">
-            <div class="modal-header">
-                <h5 class="modal-title">@modalTitle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                <div class="mb-3">
-                    <label asp-for="@Model.album.ArtistId" class="control-label"></label>
-                    <select asp-for="@Model.album.ArtistId" asp-items="@Model.artistList" class="form-select" autofocus></select>
-                    <span asp-validation-for="@Model.album.ArtistId" class="text-danger"></span>
+            <fieldset>
+                <div class="modal-header">
+                    <h5 class="modal-title">@modalTitle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
 
-                <div class="mb-3">
-                    <label asp-for="album.Title" asp="" class="control-label"></label>
-                    <input asp-for="album.Title" class="form-control" />
-                    <span asp-validation-for="album.Title" class="text-danger"></span>
+                    <div class="mb-3">
+                        <label asp-for="@Model.album.ArtistId" class="control-label"></label>
+                        <select asp-for="@Model.album.ArtistId" asp-items="@Model.artistList" class="form-select" autofocus></select>
+                        <span asp-validation-for="@Model.album.ArtistId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="album.Title" asp="" class="control-label"></label>
+                        <input asp-for="album.Title" class="form-control" />
+                        <span asp-validation-for="album.Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="album.ReleaseYear" class="control-label"></label>
+                        <input asp-for="album.ReleaseYear" class="form-control" />
+                        <span asp-validation-for="album.ReleaseYear" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="album.GenreIds" class="control-label"></label>
+                        <select asp-for="album.GenreIds" asp-items="@Model.genreList" class="form-select"></select>
+                        <span asp-validation-for="album.GenreIds" class="text-danger"></span>
+                    </div>
+
                 </div>
-
-                <div class="mb-3">
-                    <label asp-for="album.ReleaseYear" class="control-label"></label>
-                    <input asp-for="album.ReleaseYear" class="form-control" />
-                    <span asp-validation-for="album.ReleaseYear" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="album.GenreIds" class="control-label"></label>
-                    <select asp-for="album.GenreIds" asp-items="@Model.genreList" class="form-select"></select>
-                    <span asp-validation-for="album.GenreIds" class="text-danger"></span>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary">Save</button>
-                @Html.AntiForgeryToken()
-            </div>
+                    @Html.AntiForgeryToken()
+                </div>
+            </fieldset>
         </!form>
     </div>
 </div>

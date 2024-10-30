@@ -14,11 +14,16 @@
             </div>
             <div class="modal-footer">
                 <!form hx-delete="@Url.Page("./Index")"
-                       onsubmit="AppLib.preventMultiSubmit(this)">
-                    <input id="deleteItemId" name="deleteItemId" type="hidden" value="">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                    @Html.AntiForgeryToken()
+                       @* Only include the item Id - do not include the Anti Forgery Token in the URL params
+                       - the token will be added to the request headers with custom code *@
+                       hx-params="deleteItemId"
+                       hx-disabled-elt="find fieldset">
+                    <fieldset>
+                        <input id="deleteItemId" name="deleteItemId" type="hidden" value="">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        @Html.AntiForgeryToken()
+                    </fieldset>
                 </!form>
             </div>
         </div>

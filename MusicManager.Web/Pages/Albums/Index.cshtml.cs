@@ -191,9 +191,9 @@ namespace MusicManager.Web.Pages.Albums
             return Partial("_EditModal", (model, selectOptions.artistList, selectOptions.genreList));
         }
 
-        public async Task<IActionResult> OnDeleteAsync(int id)
+        public async Task<IActionResult> OnDeleteAsync(int deleteItemId)
         {
-            var result = await _dataWriteService.DeleteAlbum(id);
+            var result = await _dataWriteService.DeleteAlbum(deleteItemId);
 
             if (!result)
                 return NotFound();

@@ -156,9 +156,9 @@ namespace MusicManager.Web.Pages.Genres
             return Partial("_EditModal", model);
         }
 
-        public async Task<IActionResult> OnDeleteAsync(int id)
+        public async Task<IActionResult> OnDeleteAsync(int deleteItemId)
         {
-            var result = await _dataWriteService.DeleteGenre(id);
+            var result = await _dataWriteService.DeleteGenre(deleteItemId);
 
             if (!result)
                 return NotFound();
