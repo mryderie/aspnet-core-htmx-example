@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MusicManager.Domain.Dtos.Track;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
+using MusicManager.Web.Pages.Shared;
 
 namespace MusicManager.Web.Pages.Tracks
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private const int PAGE_SIZE = 10;
         private readonly IDataReadService _dataReadService;
@@ -131,7 +130,7 @@ namespace MusicManager.Web.Pages.Tracks
                 return NotFound();
             }
 
-            return Partial("_DetailsModal", track);
+            return DetailsModal("Track", track);
         }
 
         public async Task<IActionResult> OnGetEditModal(int? id, int? albumId)

@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Dtos.Genre;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
+using MusicManager.Web.Pages.Shared;
 
 namespace MusicManager.Web.Pages.Genres
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasePageModel
     {
         private const int PAGE_SIZE = 10;
         private readonly IDataReadService _dataReadService;
@@ -101,8 +101,7 @@ namespace MusicManager.Web.Pages.Genres
             {
                 return NotFound();
             }
-
-            return Partial("_DetailsModal", genre);
+            return DetailsModal("Genre", genre);
         }
 
         public async Task<IActionResult> OnGetEditModal(int? id)

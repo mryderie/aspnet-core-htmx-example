@@ -1,34 +1,21 @@
 ﻿@model MusicManager.Domain.Dtos.Track.TrackViewDto
 
-<div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Track Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <dl>
-                <dt>@Html.DisplayNameFor(m => m.Title)</dt>
-                <dd>@Html.DisplayFor(m => m.Title)</dd>
+<dl>
+    <dt>@Html.DisplayNameFor(m => m.Title)</dt>
+    <dd>@Html.DisplayFor(m => m.Title)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.ArtistName)</dt>
-                <dd>@Html.DisplayFor(m => m.ArtistName)</dd>
+    <dt>@Html.DisplayNameFor(m => m.ArtistName)</dt>
+    <dd>@Html.DisplayFor(m => m.ArtistName)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.AlbumTitle)</dt>
-                <dd>@Html.DisplayFor(m => m.AlbumTitle)</dd>
+    <dt>@Html.DisplayNameFor(m => m.AlbumTitle)</dt>
+    <dd>@Html.DisplayFor(m => m.AlbumTitle)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.TrackNumber)</dt>
-                <dd>@Html.DisplayFor(m => m.TrackNumber)</dd>
+    <dt>@Html.DisplayNameFor(m => m.TrackNumber)</dt>
+    <dd>@Html.DisplayFor(m => m.TrackNumber)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.Created)</dt>
-                <dd>@Html.DisplayFor(m => m.Created)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Created)</dt>
+    <dd>@Html.DisplayFor(m => m.Created)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.Updated)</dt>
-                <dd>@Html.DisplayFor(m => m.Updated)</dd>
-            </dl>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-    </div>
-</div>
+    <dt>@Html.DisplayNameFor(m => m.Updated)</dt>
+    <dd>@Html.DisplayFor(m => m.Updated)</dd>
+</dl>

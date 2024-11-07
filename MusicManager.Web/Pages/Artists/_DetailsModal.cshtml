@@ -1,28 +1,15 @@
 ﻿@model MusicManager.Domain.Dtos.Artist.ArtistViewDto
 
-<div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Artist Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <dl>
-                <dt>@Html.DisplayNameFor(m => m.Name)</dt>
-                <dd>@Html.DisplayFor(m => m.Name)</dd>
+<dl>
+    <dt>@Html.DisplayNameFor(m => m.Name)</dt>
+    <dd>@Html.DisplayFor(m => m.Name)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.AlbumCount)</dt>
-                <dd>@Html.DisplayFor(m => m.AlbumCount)</dd>
+    <dt>@Html.DisplayNameFor(m => m.AlbumCount)</dt>
+    <dd>@Html.DisplayFor(m => m.AlbumCount)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.Created)</dt>
-                <dd>@Html.DisplayFor(m => m.Created)</dd>
+    <dt>@Html.DisplayNameFor(m => m.Created)</dt>
+    <dd>@Html.DisplayFor(m => m.Created)</dd>
 
-                <dt>@Html.DisplayNameFor(m => m.Updated)</dt>
-                <dd>@Html.DisplayFor(m => m.Updated)</dd>
-            </dl>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-    </div>
-</div>
+    <dt>@Html.DisplayNameFor(m => m.Updated)</dt>
+    <dd>@Html.DisplayFor(m => m.Updated)</dd>
+</dl>
