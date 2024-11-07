@@ -2,10 +2,8 @@
 
 namespace MusicManager.Domain.Dtos.Genre
 {
-    public class GenreEditDto
+    public class GenreEditDto : BaseEditDto
     {
-        public int Id { get; set; }
-
         [Required]
         [StringLength(50)]
         public string Name { get; set; }

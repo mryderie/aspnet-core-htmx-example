@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MusicManager.Domain.Dtos.Artist;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
@@ -107,7 +108,7 @@ namespace MusicManager.Web.Pages.Artists
         {
             // Create item form
             if (!id.HasValue)
-                return Partial("_EditModal");
+                return EditForm();
 
             // Update item form
             var artist = await _dataReadService.GetArtistEdit(id.Value);
@@ -116,14 +117,14 @@ namespace MusicManager.Web.Pages.Artists
                 return NotFound();
             }
 
-            return Partial("_EditModal", artist);
+            return EditForm(artist);
         }
 
         public async Task<IActionResult> OnPostAsync(ArtistEditDto model)
         {
             //temp - to test handling a server-side validation error
             if (model.Name == "error")
-                ModelState.AddModelError("Name", "Server-side validation error...");
+                ModelState.AddModelError(nameof(ArtistEditDto.Name), "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -133,14 +134,14 @@ namespace MusicManager.Web.Pages.Artists
                 return new NoContentResult();
             }
 
-            return Partial("_EditModal", model);
+            return EditForm(model);
         }
 
         public async Task<IActionResult> OnPutAsync(int id, ArtistEditDto model)
         {
             //temp - to test handling a server-side validation error
             if (model.Name == "error")
-                ModelState.AddModelError("Name", "Server-side validation error...");
+                ModelState.AddModelError(nameof(ArtistEditDto.Name), "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -153,7 +154,7 @@ namespace MusicManager.Web.Pages.Artists
                 return new NoContentResult();
             }
 
-            return Partial("_EditModal", model);
+            return EditForm(model);
         }
 
         public async Task<IActionResult> OnDeleteAsync(int deleteItemId)
@@ -165,6 +166,21 @@ namespace MusicManager.Web.Pages.Artists
 
             Response.Headers["HX-Trigger"] = "gridItemDelete";
             return new NoContentResult();
+        }
+
+        protected PartialViewResult EditForm(ArtistEditDto editDto = null)
+        {
+            var viewData = new ViewDataDictionary(MetadataProvider, ViewData.ModelState)
+            {
+                Model = editDto,
+            };
+            viewData["TypeDisplayName"] = "Artist";
+
+            return new PartialViewResult
+            {
+                ViewName = "_EditModalWrapper",
+                ViewData = viewData
+            };
         }
     }
 }

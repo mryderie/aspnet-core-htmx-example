@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MusicManager.Domain.Dtos.Track;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
@@ -138,8 +139,7 @@ namespace MusicManager.Web.Pages.Tracks
             // Create item form
             if (!id.HasValue)
             {
-                var createSelectOptions = await GetSelectOptions(albumId);
-                return Partial("_EditModal", ((TrackEditDto)null, createSelectOptions));
+                return await EditForm();
             }
 
             // Update item form
@@ -149,15 +149,14 @@ namespace MusicManager.Web.Pages.Tracks
                 return NotFound();
             }
 
-            var updateSelectOptions = await GetSelectOptions(track.AlbumId);
-            return Partial("_EditModal", (track, updateSelectOptions));
+            return await EditForm(track);
         }
 
-        public async Task<IActionResult> OnPostAsync([Bind(Prefix = "Item1")]TrackEditDto model)
+        public async Task<IActionResult> OnPostAsync(TrackEditDto model)
         {
             //temp - to test handling a server-side validation error
             if (model.Title == "error")
-                ModelState.AddModelError("Item1.Title", "Server-side validation error...");
+                ModelState.AddModelError(nameof(TrackEditDto.Title), "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -167,15 +166,14 @@ namespace MusicManager.Web.Pages.Tracks
                 return new NoContentResult();
             }
 
-            var updateSelectOptions = await GetSelectOptions(model.AlbumId);
-            return Partial("_EditModal", (model, updateSelectOptions));
+            return await EditForm(model);
         }
 
-        public async Task<IActionResult> OnPutAsync(int id, [Bind(Prefix = "Item1")]TrackEditDto model)
+        public async Task<IActionResult> OnPutAsync(int id, TrackEditDto model)
         {
             //temp - to test handling a server-side validation error
             if (model.Title == "error")
-                ModelState.AddModelError("Item1.Title", "Server-side validation error...");
+                ModelState.AddModelError(nameof(TrackEditDto.Title), "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -188,8 +186,7 @@ namespace MusicManager.Web.Pages.Tracks
                 return new NoContentResult();
             }
 
-            var updateSelectOptions = await GetSelectOptions(model.AlbumId);
-            return Partial("_EditModal", (model, updateSelectOptions));
+            return await EditForm(model);
         }
 
         public async Task<IActionResult> OnDeleteAsync(int deleteItemId)
@@ -203,13 +200,24 @@ namespace MusicManager.Web.Pages.Tracks
             return new NoContentResult();
         }
 
-        protected async Task<List<SelectListItem>> GetSelectOptions(int? albumId = null)
+        protected async Task<PartialViewResult> EditForm(TrackEditDto editDto = null)
         {
             var albumTitles = await _dataReadService.GetAlbumTitles();
             var albumList = albumTitles.Select(a => new SelectListItem(a.albumTitle, a.albumId.ToString(),
-                                                                        albumId == a.albumId)).ToList();
+                                                                        editDto?.AlbumId == a.albumId)).ToList();
 
-            return albumList;
+            var viewData = new ViewDataDictionary(MetadataProvider, ViewData.ModelState)
+            {
+                Model = editDto,
+            };
+            viewData["TypeDisplayName"] = "Track";
+            viewData["AlbumList"] = albumList;
+
+            return new PartialViewResult
+            {
+                ViewName = "_EditModalWrapper",
+                ViewData = viewData
+            };
         }
     }
 }

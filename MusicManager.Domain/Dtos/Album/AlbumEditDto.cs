@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MusicManager.Domain.Dtos.Album
 {
-    public class AlbumEditDto
+    public class AlbumEditDto : BaseEditDto
     {
-        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]

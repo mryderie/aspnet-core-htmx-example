@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MusicManager.Domain.Dtos.Album;
 using MusicManager.Domain.Services;
 using MusicManager.Web.Helpers;
@@ -136,10 +137,7 @@ namespace MusicManager.Web.Pages.Albums
         {
             // Create item form
             if (!id.HasValue)
-            {
-                var createSelectOptions = await GetSelectOptions(artistId);
-                return Partial("_EditModal", ((AlbumEditDto)null, createSelectOptions.artistList, createSelectOptions.genreList));
-            }
+                return await EditForm();
 
             // Update item form
             var album = await _dataReadService.GetAlbumEdit(id.Value);
@@ -148,15 +146,14 @@ namespace MusicManager.Web.Pages.Albums
                 return NotFound();
             }
 
-            var updateSelectOptions = await GetSelectOptions(album.ArtistId, album.GenreIds);
-            return Partial("_EditModal", (album, updateSelectOptions.artistList, updateSelectOptions.genreList));
+            return await EditForm(album);
         }
 
-        public async Task<IActionResult> OnPostAsync([Bind(Prefix = "Item1")]AlbumEditDto model)
+        public async Task<IActionResult> OnPostAsync(AlbumEditDto model)
         {
             //temp - to test handling a server-side validation error
             if (model.Title == "error")
-                ModelState.AddModelError("Item1.Title", "Server-side validation error...");
+                ModelState.AddModelError(nameof(AlbumEditDto.Title), "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -166,15 +163,14 @@ namespace MusicManager.Web.Pages.Albums
                 return new NoContentResult();
             }
 
-            var selectOptions = await GetSelectOptions(model.ArtistId, model.GenreIds);
-            return Partial("_EditModal", (model, selectOptions.artistList, selectOptions.genreList));
+            return await EditForm(model);
         }
 
-        public async Task<IActionResult> OnPutAsync(int id, [Bind(Prefix = "Item1")]AlbumEditDto model)
+        public async Task<IActionResult> OnPutAsync(int id, AlbumEditDto model)
         {
             //temp - to test handling a server-side validation error
             if (model.Title == "error")
-                ModelState.AddModelError("Item1.Title", "Server-side validation error...");
+                ModelState.AddModelError(nameof(AlbumEditDto.Title), "Server-side validation error...");
 
             if (ModelState.IsValid)
             {
@@ -187,8 +183,7 @@ namespace MusicManager.Web.Pages.Albums
                 return new NoContentResult();
             }
 
-            var selectOptions = await GetSelectOptions(model.ArtistId, model.GenreIds);
-            return Partial("_EditModal", (model, selectOptions.artistList, selectOptions.genreList));
+            return await EditForm(model);
         }
 
         public async Task<IActionResult> OnDeleteAsync(int deleteItemId)
@@ -202,17 +197,29 @@ namespace MusicManager.Web.Pages.Albums
             return new NoContentResult();
         }
 
-        protected async Task<(List<SelectListItem> artistList, List<SelectListItem> genreList)> GetSelectOptions(int? artistId = null, IList<int> genreIds = null)
+        protected async Task<PartialViewResult> EditForm(AlbumEditDto editDto = null)
         {
             var artistNames = await _dataReadService.GetArtistNames();
             var artistList = artistNames.Select(a => new SelectListItem(a.artistName, a.artistId.ToString(),
-                                                                        artistId == a.artistId)).ToList();
+                                                                        editDto?.ArtistId == a.artistId)).ToList();
 
             var genreNames = await _dataReadService.GetGenreNames();
             var genreList = genreNames.Select(a => new SelectListItem(a.genreName, a.genreId.ToString(),
-                                                                        genreIds != null ? genreIds.Any(g => g == a.genreId) : false)).ToList();
+                                                                        editDto?.GenreIds.Any(g => g == a.genreId) ?? false)).ToList();
 
-            return (artistList, genreList);
+            var viewData = new ViewDataDictionary(MetadataProvider, ViewData.ModelState)
+            {
+                Model = editDto,
+            };
+            viewData["TypeDisplayName"] = "Album";
+            viewData["ArtistList"] = artistList;
+            viewData["GenreList"] = genreList;
+
+            return new PartialViewResult
+            {
+                ViewName = "_EditModalWrapper",
+                ViewData = viewData
+            };
         }
     }
 }

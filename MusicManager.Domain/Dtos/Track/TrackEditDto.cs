@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MusicManager.Domain.Dtos.Track
 {
-    public class TrackEditDto
+    public class TrackEditDto : BaseEditDto
     {
-        public int Id { get; set; }
-
         [Required]
         [DisplayName("Album")]
         public int AlbumId { get; set; }
