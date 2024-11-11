@@ -212,6 +212,7 @@ namespace MusicManager.Web.Pages.Tracks
             viewData["TypeDisplayName"] = "Track";
             viewData["AlbumList"] = albumList;
 
+            Response.Headers["HX-Trigger-After-Settle"] = "showItemModal";
             return new PartialViewResult
             {
                 ViewName = "_EditModalWrapper",

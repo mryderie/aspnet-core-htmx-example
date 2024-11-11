@@ -9,9 +9,8 @@
     <a href="#"
         hx-get="@Url.Page("./Index", "EditModal", new { artistId = Model.Albums.PagingData.Parameters[ParamName.ArtistId] })"
         hx-trigger="click"
+        onclick="AppLib.showModalBackdrop()"
         hx-target="#itemModalContainer"
-        data-bs-toggle="modal"
-        data-bs-target="#itemModalContainer"
         class="btn btn-outline-primary mb-2">
         <i class="bi-plus-circle" role="img" aria-label="Add Album"></i>
         Add Album
@@ -139,15 +138,13 @@
                         <a href="#"
                            hx-get="@Url.Page("./Index", "EditModal", values: new { id = item.Id })"
                            hx-trigger="click"
+                           onclick="AppLib.showModalBackdrop()"
                            hx-target="#itemModalContainer"
-                           data-bs-toggle="modal"
-                           data-bs-target="#itemModalContainer"
                            class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-pencil" role="img" aria-label="Edit"></i></a>
                         <a href="#"
                            hx-get="@Url.Page("./Index", "DetailsModal", values: new { id = item.Id })"
                            hx-trigger="click"
-                           data-bs-toggle="modal"
-                           data-bs-target="#itemModalContainer"
+                           onclick="AppLib.showModalBackdrop()"
                            hx-target="#itemModalContainer"
                            class="btn btn-outline-primary mb-1 mb-md-0"><i class="bi-info-circle" role="img" aria-label="Details"></i></a>
                         <a href="#"

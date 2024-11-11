@@ -15,6 +15,7 @@ namespace MusicManager.Web.Pages.Shared
             };
             viewData["TypeDisplayName"] = typeDisplayName;
 
+            Response.Headers["HX-Trigger-After-Settle"] = "showItemModal";
             return new PartialViewResult
             {
                 ViewName = "_DetailsModalWrapper",

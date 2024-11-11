@@ -19,19 +19,21 @@ v.bootstrap({ watch: true });
 
 
 
-export function closeModal(modalId: string, callback?: Function) {
+function closeModalAndRefreshBody(modalId: string) {
 
-    const modelEl = document.getElementById(modalId);
-    const modal = Modal.getInstance(modelEl);
+    const modalEl = document.getElementById(modalId);
+    // Refresh the page body after the modal close animation completes
+    modalEl.addEventListener("hidden.bs.modal", () => htmx.ajax("get", document.location.href, undefined));
+
+    const modal = Modal.getInstance(modalEl);
     modal.hide();
-
-    if (callback) {
-        modelEl.addEventListener('hidden.bs.modal', event => {
-            callback();
-        });
-    }
 }
 
+function removeItemModal() {
+    const modalEl = document.getElementById("itemModalContainer");
+    // remove modal content completely so that it does not briefly appear the next time a modal is opened
+    modalEl.querySelector(".modal-content")?.remove();
+}
 function errorRefresh(details: any) {
     //todo - log details
 
@@ -70,13 +72,39 @@ document.body.addEventListener('htmx:configRequest', function (e: any) {
     }
 });
 
+// "showItemModal" is set in the "HX-Trigger-After-Settle" header by the server in a modal response
+document.body.addEventListener("showItemModal", function () {
+    // remove the backdrop that was shown while waiting for the server response
+    const modalLoadingBackdrop = document.getElementById("modalLoadingBackdrop");
+    modalLoadingBackdrop.classList.replace("show", "hide");
+    setTimeout(function () {
+        // wait 500ms for the "hide" fade-out animation to complete, then remove the loaing backdrop element
+        // todo - there is a slight flicker as the loading backdrop fades out, and the new backdrop fades in
+        modalLoadingBackdrop?.remove();
+    }, 500);
+
+    // show the new modal that was provided by the server
+    const modalEl = document.getElementById("itemModalContainer");
+    modalEl.addEventListener('hidden.bs.modal', removeItemModal);
+    const modal = Modal.getOrCreateInstance(modalEl);
+    modal.show();
+});
+
 document.body.addEventListener("gridItemEdit", function () {
-    closeModal("itemModalContainer", () => htmx.ajax("get", document.location.href, undefined));
+    closeModalAndRefreshBody("itemModalContainer");
 });
 
 document.body.addEventListener("gridItemDelete", function () {
-    closeModal("confirmDeleteModalContainer", () => htmx.ajax("get", document.location.href, undefined));
+    closeModalAndRefreshBody("confirmDeleteModalContainer");
 });
+
+export function showModalBackdrop() {
+    // show a transparent modal backdrop while waiting for a server modal response
+    const backdrop = document.createElement("div");
+    backdrop.setAttribute("id", "modalLoadingBackdrop")
+    backdrop.className = "modal-backdrop fade show";
+    document.body.appendChild(backdrop);
+}
 
 export function isFormValid(submitter: HTMLElement) {
     const form = submitter.closest("form");

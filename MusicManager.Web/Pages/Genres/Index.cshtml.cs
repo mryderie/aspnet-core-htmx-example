@@ -176,6 +176,7 @@ namespace MusicManager.Web.Pages.Genres
             };
             viewData["TypeDisplayName"] = "Genre";
 
+            Response.Headers["HX-Trigger-After-Settle"] = "showItemModal";
             return new PartialViewResult
             {
                 ViewName = "_EditModalWrapper",

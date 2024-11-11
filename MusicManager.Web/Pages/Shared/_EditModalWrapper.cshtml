@@ -8,7 +8,7 @@
     var modalTitle = isCreate ? $"Create {ViewData["TypeDisplayName"]}" : $"Update {ViewData["TypeDisplayName"]}";
 }
 
-<div class="modal-dialog modal-dialog-centered">
+<div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
         <!form @(hxMethod)="@(submissionUrl)"
                 hx-trigger="submit[AppLib.isFormValid(submitter)]"
